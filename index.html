@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AuraInvest — Portfolio & Investment Tracker</title>
+  <meta name="description" content="Track your portfolio in INR, multi-asset holdings, financial goals, and monthly investment performance with Google Sheets sync.">
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Chart.js CDN for responsive charts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  
+  <!-- Canvas Confetti CDN for goal achievements -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <!-- App Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <div id="app-container">
+
+    <!-- ======================================================================
+         SIDEBAR NAVIGATION
+         ====================================================================== -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-badge">⚡</div>
+        <div class="logo-text">
+          <h2>AuraInvest</h2>
+          <span>Portfolio OS (INR)</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="#overview" class="nav-item active" data-view="overview" id="nav-overview">
+          <span class="nav-icon">📊</span>
+          <span>Overview</span>
+        </a>
+
+        <a href="#holdings" class="nav-item" data-view="holdings" id="nav-holdings">
+          <span class="nav-icon">💼</span>
+          <span>Holdings</span>
+          <span class="nav-badge" id="holdingsNavBadge">13</span>
+        </a>
+
+        <!-- DEDICATED MONTHLY ENTRY TAB -->
+        <a href="#add-monthly" class="nav-item" data-view="add-monthly" id="nav-add-monthly" style="background: rgba(99, 102, 241, 0.15); border: 1px dashed rgba(99, 102, 241, 0.4);">
+          <span class="nav-icon">➕</span>
+          <span>Add Monthly Update</span>
+        </a>
+
+        <a href="#goals" class="nav-item" data-view="goals" id="nav-goals">
+          <span class="nav-icon">🎯</span>
+          <span>Goals</span>
+          <span class="nav-badge" id="goalsNavBadge">4</span>
+        </a>
+
+        <a href="#monthly" class="nav-item" data-view="monthly" id="nav-monthly">
+          <span class="nav-icon">📅</span>
+          <span>Monthly Review</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="quick-btn btn-primary" onclick="window.openHoldingModal()">
+          <span>➕</span>
+          <span>Add Asset</span>
+        </button>
+        <button class="quick-btn btn-secondary" onclick="window.openSheetsModal()">
+          <span>☁️</span>
+          <span>Google Sheets</span>
+        </button>
+        <button class="quick-btn btn-ghost" style="font-size: 0.8rem; padding: 6px;" onclick="window.openDataModal()">
+          <span>💾 Backup & Reset</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- ======================================================================
+         MAIN CONTENT AREA
+         ====================================================================== -->
+    <main class="main-wrapper">
+
+      <!-- Sticky Top Header & Live Marquee -->
+      <header class="top-header">
+        <!-- Live Ticker Bar -->
+        <div class="ticker-container">
+          <div class="ticker-track" id="tickerTrack">
+            <!-- Dynamically populated ticker items -->
+          </div>
+        </div>
+
+        <!-- Header Controls Bar -->
+        <div class="header-actions-bar">
+          <div class="page-title-area">
+            <h1 id="activeViewTitle">Portfolio Overview</h1>
+            <div id="sheetsStatusBadge" class="sheets-badge offline" onclick="window.openSheetsModal()" title="Click to configure Google Sheets sync">
+              <span>☁️</span>
+              <span>Connect Google Sheets</span>
+            </div>
+          </div>
+
+          <div class="header-controls">
+            <!-- Currency Switcher -->
+            <div class="control-pill">
+              <span>💱</span>
+              <select id="currencySelect" class="select-clean" title="Select Currency">
+                <option value="INR" selected>INR (₹)</option>
+                <option value="USD">USD ($)</option>
+                <option value="EUR">EUR (€)</option>
+                <option value="GBP">GBP (£)</option>
+                <option value="CAD">CAD ($)</option>
+                <option value="AUD">AUD ($)</option>
+                <option value="JPY">JPY (¥)</option>
+              </select>
+            </div>
+
+            <!-- Theme Switcher -->
+            <div class="control-pill">
+              <span>🎨</span>
+              <select id="themeSelect" class="select-clean" title="Select Theme">
+                <option value="dark">Dark Luxury</option>
+                <option value="midnight">Midnight OLED</option>
+                <option value="light">Crisp Light</option>
+              </select>
+            </div>
+
+            <!-- Quick Action to Monthly Entry -->
+            <button class="quick-btn btn-primary" style="padding: 7px 14px; font-size: 0.82rem;" onclick="window.switchView('add-monthly')">
+              <span>➕ Update Month</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- ====================================================================
+           SECTION 1: OVERVIEW
+           ==================================================================== -->
+      <section id="view-overview" class="view-section active">
+        <!-- Summary Cards Grid -->
+        <div class="metrics-grid">
+          <!-- Total Net Worth -->
+          <div class="glass-card metric-card">
+            <div class="metric-card-top">
+              <span class="metric-label">Total Net Worth</span>
+              <div class="metric-icon-badge">💎</div>
+            </div>
+            <div class="metric-value mono-num" id="metricNetWorth">₹3,25,453</div>
+            <div class="metric-footer">
+              <span style="color: var(--text-muted);">Current valuation (Aug 2026)</span>
+            </div>
+          </div>
+
+          <!-- Total Gain / Loss -->
+          <div class="glass-card metric-card">
+            <div class="metric-card-top">
+              <span class="metric-label">All-Time Return</span>
+              <div class="metric-icon-badge">📈</div>
+            </div>
+            <div class="metric-value mono-num" id="metricTotalGain">+₹2,808</div>
+            <div class="metric-footer">
+              <span id="badgeTotalGain" class="badge badge-success">+0.87%</span>
+              <span style="color: var(--text-muted); font-size: 0.78rem;">Net profit</span>
+            </div>
+          </div>
+
+          <!-- 24h Daily Change -->
+          <div class="glass-card metric-card">
+            <div class="metric-card-top">
+              <span class="metric-label">24h Day Change</span>
+              <div class="metric-icon-badge">⚡</div>
+            </div>
+            <div class="metric-value mono-num" id="metricDayChange">+₹480</div>
+            <div class="metric-footer">
+              <span id="badgeDayChange" class="badge badge-success">+0.15%</span>
+              <span style="color: var(--text-muted); font-size: 0.78rem;">Today's delta</span>
+            </div>
+          </div>
+
+          <!-- Total Cost Basis -->
+          <div class="glass-card metric-card">
+            <div class="metric-card-top">
+              <span class="metric-label">Total Invested</span>
+              <div class="metric-icon-badge">💰</div>
+            </div>
+            <div class="metric-value mono-num" id="metricCostBasis">₹3,22,645</div>
+            <div class="metric-footer">
+              <span style="color: var(--text-muted); font-size: 0.78rem;">Principal capital invested</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Grid (Performance Growth + Allocation) -->
+        <div class="overview-grid">
+          <!-- Growth Chart Card -->
+          <div class="glass-card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title"><span>📈</span> Portfolio Growth</h3>
+                <span class="card-subtitle">Historical net worth progression</span>
+              </div>
+              <div class="chart-header-actions">
+                <button class="time-pill" data-timeframe="1W">1W</button>
+                <button class="time-pill" data-timeframe="1M">1M</button>
+                <button class="time-pill" data-timeframe="3M">3M</button>
+                <button class="time-pill active" data-timeframe="1Y">1Y</button>
+                <button class="time-pill" data-timeframe="ALL">ALL</button>
+              </div>
+            </div>
+            <div class="chart-container">
+              <canvas id="performanceChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Asset Allocation Card -->
+          <div class="glass-card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title"><span>🥧</span> Asset Allocation</h3>
+                <span class="card-subtitle">Diversification across categories</span>
+              </div>
+            </div>
+            <div style="height: 180px; position: relative;">
+              <canvas id="allocationChart"></canvas>
+            </div>
+            <div class="allocation-breakdown" id="allocationList">
+              <!-- Dynamically populated categories -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Overview Quick Highlights -->
+        <div class="highlights-grid">
+          <div class="glass-card" style="display: flex; align-items: center; justify-content: space-between;">
+            <div>
+              <span class="card-subtitle" style="text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">Top Performing Holding</span>
+              <h4 id="highlightTopPerformerName" style="font-size: 1.15rem; margin-top: 4px;">SBI PSU Direct Plan</h4>
+            </div>
+            <span id="highlightTopPerformerReturn" class="badge badge-success" style="font-size: 0.95rem; padding: 6px 12px;">+₹3,713 (+7.50%)</span>
+          </div>
+
+          <div class="glass-card" style="display: flex; align-items: center; justify-content: space-between;">
+            <div>
+              <span class="card-subtitle" style="text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">Next Month Update</span>
+              <h4 style="font-size: 1.05rem; margin-top: 4px;">Log September 2026 data</h4>
+            </div>
+            <button class="quick-btn btn-primary" style="width: auto; padding: 8px 16px;" onclick="window.switchView('add-monthly')">
+              <span>Open Form 📝</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 2: HOLDINGS
+           ==================================================================== -->
+      <section id="view-holdings" class="view-section">
+        <!-- Filter & Search Controls -->
+        <div class="filter-bar">
+          <div class="search-box">
+            <span>🔍</span>
+            <input type="text" id="holdingSearchInput" placeholder="Search by name, symbol, or sector...">
+          </div>
+
+          <div class="filter-pills" id="holdingsFilterPills">
+            <button class="filter-btn active" data-category="all">All (13)</button>
+            <button class="filter-btn" data-category="stock">Stocks</button>
+            <button class="filter-btn" data-category="etf">Mutual Funds & ETFs</button>
+            <button class="filter-btn" data-category="commodity">Gold & Silver</button>
+            <button class="filter-btn" data-category="cash">Fixed & Savings</button>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="badge badge-neutral" id="holdingsCountBadge">13 Holdings</span>
+            <button class="quick-btn btn-primary" style="width: auto; padding: 8px 16px;" onclick="window.openHoldingModal()">
+              <span>+ Add Asset</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Holdings Table -->
+        <div class="table-wrapper">
+          <table class="data-table" id="holdingsTable">
+            <thead>
+              <tr>
+                <th data-sort="name">Asset / Scheme ⇕</th>
+                <th>Category</th>
+                <th data-sort="quantity">Units</th>
+                <th>Avg Buy / NAV</th>
+                <th data-sort="price">Current Price ⇕</th>
+                <th data-sort="value">Current Value (₹) ⇕</th>
+                <th data-sort="gain">Gain / (Loss) ⇕</th>
+                <th data-sort="allocation">% Portfolio ⇕</th>
+                <th style="text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="holdingsTableBody">
+              <!-- Dynamically populated rows -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 3: DEDICATED "ADD MONTHLY UPDATE" TAB
+           ==================================================================== -->
+      <section id="view-add-monthly" class="view-section">
+        <div class="glass-card entry-header-card">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+            <div>
+              <h2 style="font-size: 1.35rem; font-weight: 800;">➕ Record Next Month's Investment Data</h2>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 3px;">Enter current values & units for each asset category. Updates your live portfolio, recalculates all analytics, and syncs to Google Sheets.</p>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div class="form-group" style="margin: 0;">
+                <label for="entryMonthSelect" style="font-size: 0.72rem; color: var(--text-muted);">Month & Year:</label>
+                <input type="month" id="entryMonthSelect" value="2026-09" class="form-input" style="padding: 6px 12px; font-weight: 700;">
+              </div>
+
+              <button class="quick-btn btn-primary" style="padding: 10px 20px; font-size: 0.95rem; margin-top: 14px;" onclick="window.handleSaveMonthlyEntry()">
+                <span>💾 Save & Record Snapshot</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Live Running Totals Banner -->
+          <div class="entry-live-banner">
+            <div class="entry-live-stat">
+              <span>Calculated Net Worth</span>
+              <strong id="entryLiveNetWorth" style="color: var(--text-primary);">₹0</strong>
+            </div>
+            <div class="entry-live-stat">
+              <span>Total Capital Invested</span>
+              <strong id="entryLiveInvested" style="color: var(--accent-primary);">₹0</strong>
+            </div>
+            <div class="entry-live-stat">
+              <span>Total Unrealized Return</span>
+              <strong id="entryLiveGain" style="color: var(--success);">+₹0</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Containers organized by categories -->
+        <div id="monthlyEntryFormContainer">
+          <!-- Dynamically populated category forms -->
+        </div>
+
+        <div style="margin-top: 24px; text-align: right;">
+          <button class="quick-btn btn-primary" style="padding: 12px 28px; font-size: 1rem;" onclick="window.handleSaveMonthlyEntry()">
+            <span>💾 Save & Record Monthly Snapshot</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 4: GOALS
+           ==================================================================== -->
+      <section id="view-goals" class="view-section">
+        <div class="monthly-header-actions">
+          <div>
+            <h2 style="font-size: 1.25rem;">Financial Milestones & Targets</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">Track emergency funds, target wealth milestones, and savings goals with live progress bars.</p>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span class="badge badge-neutral" id="goalsCountBadge">4 Goals</span>
+            <button class="quick-btn btn-primary" style="width: auto; padding: 8px 16px;" onclick="window.openGoalModal()">
+              <span>+ Create Goal</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Goals Grid -->
+        <div class="goals-grid" id="goalsGrid">
+          <!-- Dynamically populated goal cards -->
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 5: MONTHLY REVIEW
+           ==================================================================== -->
+      <section id="view-monthly" class="view-section">
+        <div class="monthly-header-actions">
+          <div>
+            <h2 style="font-size: 1.25rem;">Monthly Review & Growth Ledger</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">Track month-over-month capital contributions, market appreciation, and investment reflections.</p>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span class="badge badge-neutral" id="monthlyCountBadge">1 Month</span>
+            <button class="quick-btn btn-primary" style="width: auto; padding: 8px 16px;" onclick="window.switchView('add-monthly')">
+              <span>+ Add Monthly Update</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Monthly Contributions vs Market Gains Chart -->
+        <div class="glass-card monthly-chart-card">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title"><span>📊</span> Monthly Net Worth Progression</h3>
+              <span class="card-subtitle">Month-by-month portfolio growth</span>
+            </div>
+          </div>
+          <div style="height: 280px; position: relative;">
+            <canvas id="monthlyGrowthChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Monthly Timeline -->
+        <div class="monthly-timeline" id="monthlyTimeline">
+          <!-- Dynamically populated monthly cards -->
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ======================================================================
+       MODAL 1: ADD / EDIT ASSET
+       ====================================================================== -->
+  <div class="modal-backdrop" id="holdingModal">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 id="holdingModalTitle">Add New Asset</h3>
+        <button class="close-btn close-modal-btn" onclick="window.closeHoldingModal()">✕</button>
+      </div>
+      <form id="holdingForm">
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="holdingSymbol">Ticker / Code *</label>
+              <input type="text" id="holdingSymbol" name="symbol" class="form-input" placeholder="e.g. HDFCBANK, GOLDBEES" required>
+            </div>
+            <div class="form-group">
+              <label for="holdingCategory">Asset Category *</label>
+              <select id="holdingCategory" name="category" class="form-select" required>
+                <option value="stock">Stock (Equity)</option>
+                <option value="etf">Mutual Fund & ETF</option>
+                <option value="commodity">Gold / Silver Commodity</option>
+                <option value="cash">Fixed Income & Liquid Cash</option>
+                <option value="real-estate">Real Estate & REIT</option>
+                <option value="crypto">Cryptocurrency</option>
+                <option value="other">Other Asset</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="holdingName">Asset / Scheme Full Name *</label>
+            <input type="text" id="holdingName" name="name" class="form-input" placeholder="e.g. HDFC Small Cap Fund" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="holdingQuantity">Units Owned *</label>
+              <input type="number" step="any" id="holdingQuantity" name="quantity" class="form-input" placeholder="e.g. 50" required>
+            </div>
+            <div class="form-group">
+              <label for="holdingAvgPrice">Avg Buy Price / NAV (₹) *</label>
+              <input type="number" step="any" id="holdingAvgPrice" name="avgBuyPrice" class="form-input" placeholder="e.g. 152.15" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="holdingCurrentPrice">Current Market Price / NAV (₹)</label>
+            <input type="number" step="any" id="holdingCurrentPrice" name="currentPrice" class="form-input" placeholder="Leave empty to use Avg Buy Price">
+          </div>
+
+          <div class="form-group">
+            <label for="holdingNotes">Sector / Notes / Strategy</label>
+            <textarea id="holdingNotes" name="notes" class="form-textarea" placeholder="e.g. Sector: IT | Long term SIP"></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="quick-btn btn-secondary" onclick="window.closeHoldingModal()">Cancel</button>
+          <button type="submit" class="quick-btn btn-primary">Save Asset</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL 2: GOOGLE APPS SCRIPT / SHEETS SYNC
+       ====================================================================== -->
+  <div class="modal-backdrop" id="sheetsModal">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3>☁️ Google Sheets Connection</h3>
+        <button class="close-btn close-modal-btn" onclick="window.closeSheetsModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5;">
+          Connect your Google Sheet backend to automatically backup holdings, fetch live records, and log monthly updates to your cloud spreadsheet.
+        </p>
+
+        <div class="form-group" style="margin-top: 10px;">
+          <label for="sheetsUrlInput">Google Apps Script Web App URL *</label>
+          <input type="url" id="sheetsUrlInput" class="form-input" value="https://script.google.com/macros/s/AKfycbwvrC2yL39zzFr0xXgG3r2cHPzziwS-_rVfSZAQpsaj49sjyutn_uL-gzX_wizg--GeWw/exec" placeholder="https://script.google.com/macros/s/.../exec">
+          <span style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">
+            Deploy <code>google-apps-script/Code.gs</code> in Google Sheets with access set to "Anyone".
+          </span>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 6px;">
+          <button class="quick-btn btn-primary" onclick="window.saveSheetsUrl()">
+            <span>💾 Save URL</span>
+          </button>
+          <button class="quick-btn btn-secondary" onclick="window.syncAllSheets()">
+            <span>⬆️ Upload All to Sheets</span>
+          </button>
+          <button class="quick-btn btn-secondary" onclick="window.fetchFromSheets()">
+            <span>⬇️ Pull from Sheets</span>
+          </button>
+        </div>
+
+        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px; font-size: 0.8rem; color: var(--text-secondary); margin-top: 10px;">
+          <strong>Quick Setup Steps:</strong>
+          <ol style="margin-left: 18px; margin-top: 6px; line-height: 1.6;">
+            <li>Create a new spreadsheet at <a href="https://sheets.new" target="_blank" style="color: var(--accent-cyan);">sheets.new</a>.</li>
+            <li>Go to <strong>Extensions > Apps Script</strong>, paste <code>google-apps-script/Code.gs</code>.</li>
+            <li>Click <strong>Deploy > New deployment > Web app</strong> (Access: <em>Anyone</em>).</li>
+            <li>Paste the generated URL above and click <strong>Save URL</strong>!</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="quick-btn btn-secondary" onclick="window.closeSheetsModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL 3: ADD / EDIT GOAL
+       ====================================================================== -->
+  <div class="modal-backdrop" id="goalModal">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 id="goalModalTitle">Create Investment Goal</h3>
+        <button class="close-btn close-modal-btn" onclick="window.closeGoalModal()">✕</button>
+      </div>
+      <form id="goalForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="goalTitle">Goal Title *</label>
+            <input type="text" id="goalTitle" name="title" class="form-input" placeholder="e.g. ₹5 Lakhs Portfolio Milestone" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="goalTargetAmount">Target Amount (₹) *</label>
+              <input type="number" step="any" id="goalTargetAmount" name="targetAmount" class="form-input" placeholder="e.g. 500000" required>
+            </div>
+            <div class="form-group">
+              <label for="goalCategory">Track Against</label>
+              <select id="goalCategory" name="category" class="form-select">
+                <option value="networth">Entire Net Worth</option>
+                <option value="etf">Mutual Funds & ETFs</option>
+                <option value="stock">Stocks Portfolio</option>
+                <option value="cash">Fixed Income & Liquid Cash</option>
+                <option value="commodity">Gold & Silver</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="goalTargetDate">Target Deadline Date</label>
+              <input type="date" id="goalTargetDate" name="targetDate" class="form-input">
+            </div>
+            <div class="form-group">
+              <label for="goalIcon">Goal Icon Emoji</label>
+              <select id="goalIcon" name="icon" class="form-select">
+                <option value="🎯">🎯 Target</option>
+                <option value="🛡️">🛡️ Shield (Emergency)</option>
+                <option value="📈">📈 Growth (Mutual Funds)</option>
+                <option value="🏡">🏡 House (Property)</option>
+                <option value="💰">💰 Money Bag</option>
+                <option value="⚡">⚡ Lightning</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="goalNotes">Description / Strategy</label>
+            <textarea id="goalNotes" name="notes" class="form-textarea" placeholder="e.g. Monthly SIP target..."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="quick-btn btn-secondary" onclick="window.closeGoalModal()">Cancel</button>
+          <button type="submit" class="quick-btn btn-primary">Save Goal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL 4: DATA & BACKUP MANAGER
+       ====================================================================== -->
+  <div class="modal-backdrop" id="dataModal">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3>Backup & Data Management</h3>
+        <button class="close-btn close-modal-btn" onclick="window.closeDataModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.88rem; color: var(--text-secondary);">Your portfolio data is saved automatically in your browser's local storage. You can also export backups, download spreadsheets, or reset to original Aug-2026 data.</p>
+
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+          <button class="quick-btn btn-secondary" onclick="window.triggerJSONExport()">
+            <span>📥</span>
+            <span>Export Full Backup (JSON)</span>
+          </button>
+
+          <button class="quick-btn btn-secondary" onclick="window.triggerCSVExport()">
+            <span>📊</span>
+            <span>Export Holdings Spreadsheet (CSV)</span>
+          </button>
+
+          <label class="quick-btn btn-secondary" style="cursor: pointer;">
+            <span>📤</span>
+            <span>Restore Backup from JSON</span>
+            <input type="file" accept=".json" style="display: none;" onchange="window.triggerJSONImport(this)">
+          </label>
+        </div>
+
+        <div style="border-top: 1px solid var(--border-subtle); padding-top: 16px; margin-top: 8px;">
+          <h4 style="font-size: 0.95rem; margin-bottom: 8px;">Reset Options</h4>
+          <div style="display: flex; gap: 10px;">
+            <button class="quick-btn btn-secondary" onclick="window.resetDemoPortfolio()">
+              <span>🔄 Reset to Aug-2026 Original Data</span>
+            </button>
+            <button class="quick-btn btn-danger" onclick="window.clearAllPortfolioData()">
+              <span>🗑️ Wipe All Data</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="quick-btn btn-secondary" onclick="window.closeDataModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <!-- App Script Entry Point -->
+  <script src="js/app.js"></script>
+</body>
+</html>
