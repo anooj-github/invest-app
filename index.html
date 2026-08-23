@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AuraInvest — Portfolio & Investment Tracker</title>
-  <meta name="description" content="Track your portfolio in INR, multi-asset holdings, financial goals, and monthly investment performance with Google Sheets sync.">
+  <title>Sharkfin — Personal Wealth, Loans, Savings & Expense OS</title>
+  <meta name="description" content="Sharkfin All-in-one personal finance tracker: Investments (Manual & SIP), Loans (EMI & Amortization), Savings (Emergency Fund & Goals), and Daily Expenses with Month-over-Month analytics.">
 
   <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Chart.js CDN for responsive charts -->
+  <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
   
-  <!-- Canvas Confetti CDN for goal achievements -->
+  <!-- Canvas Confetti CDN -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
   <!-- App Stylesheet -->
@@ -29,55 +29,71 @@
          ====================================================================== -->
     <aside class="sidebar">
       <div class="sidebar-header">
-        <div class="logo-badge">⚡</div>
+        <div class="logo-badge">🦈</div>
         <div class="logo-text">
-          <h2>AuraInvest</h2>
-          <span>Portfolio OS (INR)</span>
+          <h2>Sharkfin</h2>
+          <span>Wealth & Cashflow OS</span>
         </div>
       </div>
 
       <nav class="sidebar-nav">
+        <!-- 1. Home / Overview -->
         <a href="#overview" class="nav-item active" data-view="overview" id="nav-overview">
-          <span class="nav-icon">📊</span>
-          <span>Overview</span>
+          <span class="nav-icon">🏠</span>
+          <span>Home Overview</span>
         </a>
 
-        <a href="#holdings" class="nav-item" data-view="holdings" id="nav-holdings">
-          <span class="nav-icon">💼</span>
-          <span>Holdings</span>
-          <span class="nav-badge" id="holdingsNavBadge">13</span>
+        <!-- 2. Investment -->
+        <a href="#investments" class="nav-item" data-view="investments" id="nav-investments">
+          <span class="nav-icon">📈</span>
+          <span>Investment</span>
+          <span class="nav-badge" id="navBadgeInvestments">0</span>
         </a>
 
-        <!-- DEDICATED MONTHLY ENTRY TAB -->
-        <a href="#add-monthly" class="nav-item" data-view="add-monthly" id="nav-add-monthly" style="background: rgba(99, 102, 241, 0.15); border: 1px dashed rgba(99, 102, 241, 0.4);">
-          <span class="nav-icon">➕</span>
-          <span>Add Monthly Update</span>
+        <!-- 3. Assets (Physical & Fixed) -->
+        <a href="#assets" class="nav-item" data-view="assets" id="nav-assets">
+          <span class="nav-icon">🏛️</span>
+          <span>Assets</span>
+          <span class="nav-badge" id="navBadgeAssets">0</span>
         </a>
 
-        <a href="#goals" class="nav-item" data-view="goals" id="nav-goals">
-          <span class="nav-icon">🎯</span>
-          <span>Goals</span>
-          <span class="nav-badge" id="goalsNavBadge">4</span>
+        <!-- 4. Loans -->
+        <a href="#loans" class="nav-item" data-view="loans" id="nav-loans">
+          <span class="nav-icon">💳</span>
+          <span>Loans</span>
+          <span class="nav-badge" id="navBadgeLoans">0</span>
         </a>
 
-        <a href="#monthly" class="nav-item" data-view="monthly" id="nav-monthly">
-          <span class="nav-icon">📅</span>
-          <span>Monthly Review</span>
+        <!-- 4. Savings -->
+        <a href="#savings" class="nav-item" data-view="savings" id="nav-savings">
+          <span class="nav-icon">🛡️</span>
+          <span>Savings</span>
+          <span class="nav-badge" id="navBadgeSavings">0</span>
+        </a>
+
+        <!-- 5. Expense -->
+        <a href="#expenses" class="nav-item" data-view="expenses" id="nav-expenses">
+          <span class="nav-icon">💸</span>
+          <span>Expense</span>
+          <span class="nav-badge" id="navBadgeExpenses">0</span>
         </a>
       </nav>
 
+      <!-- Quick Actions in Sidebar -->
       <div class="sidebar-footer">
-        <button class="quick-btn btn-primary" onclick="window.openHoldingModal()">
-          <span>➕</span>
-          <span>Add Asset</span>
-        </button>
-        <button class="quick-btn btn-secondary" onclick="window.openSheetsModal()">
-          <span>☁️</span>
-          <span>Google Sheets</span>
-        </button>
-        <button class="quick-btn btn-ghost" style="font-size: 0.8rem; padding: 6px;" onclick="window.openDataModal()">
-          <span>💾 Backup & Reset</span>
-        </button>
+        <div class="sidebar-quick-actions">
+          <button class="quick-btn btn-primary" onclick="window.openQuickEntryModal()" title="Quick Add Transaction / Asset / Expense">
+            <span>⚡ Quick Add</span>
+          </button>
+          <div class="btn-group-2">
+            <button class="quick-btn btn-secondary btn-sm" onclick="window.openSheetsModal()" title="Google Sheets Sync">
+              <span>☁️ Sync</span>
+            </button>
+            <button class="quick-btn btn-secondary btn-sm" onclick="window.openDataModal()" title="Backup & Restore">
+              <span>💾 Backup</span>
+            </button>
+          </div>
+        </div>
       </div>
     </aside>
 
@@ -86,7 +102,7 @@
          ====================================================================== -->
     <main class="main-wrapper">
 
-      <!-- Sticky Top Header & Live Marquee -->
+      <!-- Sticky Top Header -->
       <header class="top-header">
         <!-- Live Ticker Bar -->
         <div class="ticker-container">
@@ -98,10 +114,10 @@
         <!-- Header Controls Bar -->
         <div class="header-actions-bar">
           <div class="page-title-area">
-            <h1 id="activeViewTitle">Portfolio Overview</h1>
+            <h1 id="activeViewTitle">Home Overview</h1>
             <div id="sheetsStatusBadge" class="sheets-badge offline" onclick="window.openSheetsModal()" title="Click to configure Google Sheets sync">
               <span>☁️</span>
-              <span>Connect Google Sheets</span>
+              <span id="sheetsStatusText">Google Sheets: Ready</span>
             </div>
           </div>
 
@@ -129,249 +145,743 @@
                 <option value="light">Crisp Light</option>
               </select>
             </div>
-
-            <!-- Quick Action to Monthly Entry -->
-            <button class="quick-btn btn-primary" style="padding: 7px 14px; font-size: 0.82rem;" onclick="window.switchView('add-monthly')">
-              <span>➕ Update Month</span>
-            </button>
           </div>
         </div>
       </header>
 
       <!-- ====================================================================
-           SECTION 1: OVERVIEW
+           SECTION 1: HOME OVERVIEW (SUMMARY OF ALL 4 TABS)
            ==================================================================== -->
       <section id="view-overview" class="view-section active">
-        <!-- Summary Cards Grid -->
-        <div class="metrics-grid">
-          <!-- Total Net Worth -->
-          <div class="glass-card metric-card">
-            <div class="metric-card-top">
-              <span class="metric-label">Total Net Worth</span>
-              <div class="metric-icon-badge">💎</div>
+        
+        <!-- Net Financial Health Hero Banner -->
+        <div class="glass-card hero-networth-card">
+          <div class="hero-networth-content">
+            <div class="hero-networth-main">
+              <span class="hero-label">Total Net Worth (Assets − Remaining Loans)</span>
+              <h2 class="hero-value mono-num" id="overviewNetWorth">₹0</h2>
+              <div class="hero-substats">
+                <span class="substat-item">
+                  <span class="dot-indicator dot-invest"></span>
+                  Investments: <strong class="mono-num" id="overviewHeroInvestments">₹0</strong>
+                </span>
+                <span class="substat-item">
+                  <span class="dot-indicator dot-savings"></span>
+                  Savings: <strong class="mono-num" id="overviewHeroSavings">₹0</strong>
+                </span>
+                <span class="substat-item">
+                  <span class="dot-indicator dot-loans"></span>
+                  Remaining Debt: <strong class="mono-num" id="overviewHeroLoans">₹0</strong>
+                </span>
+              </div>
             </div>
-            <div class="metric-value mono-num" id="metricNetWorth">₹3,25,453</div>
-            <div class="metric-footer">
-              <span style="color: var(--text-muted);">Current valuation (Aug 2026)</span>
-            </div>
-          </div>
 
-          <!-- Total Gain / Loss -->
-          <div class="glass-card metric-card">
-            <div class="metric-card-top">
-              <span class="metric-label">All-Time Return</span>
-              <div class="metric-icon-badge">📈</div>
-            </div>
-            <div class="metric-value mono-num" id="metricTotalGain">+₹2,808</div>
-            <div class="metric-footer">
-              <span id="badgeTotalGain" class="badge badge-success">+0.87%</span>
-              <span style="color: var(--text-muted); font-size: 0.78rem;">Net profit</span>
-            </div>
-          </div>
-
-          <!-- 24h Daily Change -->
-          <div class="glass-card metric-card">
-            <div class="metric-card-top">
-              <span class="metric-label">24h Day Change</span>
-              <div class="metric-icon-badge">⚡</div>
-            </div>
-            <div class="metric-value mono-num" id="metricDayChange">+₹480</div>
-            <div class="metric-footer">
-              <span id="badgeDayChange" class="badge badge-success">+0.15%</span>
-              <span style="color: var(--text-muted); font-size: 0.78rem;">Today's delta</span>
-            </div>
-          </div>
-
-          <!-- Total Cost Basis -->
-          <div class="glass-card metric-card">
-            <div class="metric-card-top">
-              <span class="metric-label">Total Invested</span>
-              <div class="metric-icon-badge">💰</div>
-            </div>
-            <div class="metric-value mono-num" id="metricCostBasis">₹3,22,645</div>
-            <div class="metric-footer">
-              <span style="color: var(--text-muted); font-size: 0.78rem;">Principal capital invested</span>
+            <div class="hero-networth-actions">
+              <div class="quick-jump-banner">
+                <span class="quick-jump-title">Quick Jump to Detailed View:</span>
+                <div class="quick-jump-buttons">
+                  <button class="pill-btn" onclick="window.switchView('investments')">📈 Investment</button>
+                  <button class="pill-btn" onclick="window.switchView('loans')">💳 Loans</button>
+                  <button class="pill-btn" onclick="window.switchView('savings')">🛡️ Savings</button>
+                  <button class="pill-btn" onclick="window.switchView('expenses')">💸 Expense</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Charts Grid (Performance Growth + Allocation) -->
-        <div class="overview-grid">
-          <!-- Growth Chart Card -->
-          <div class="glass-card">
-            <div class="card-header">
-              <div>
-                <h3 class="card-title"><span>📈</span> Portfolio Growth</h3>
-                <span class="card-subtitle">Historical net worth progression</span>
+        <!-- 4 Core Pillar Summary Cards Grid -->
+        <div class="overview-pillars-grid">
+
+          <!-- 1. Investment Overview Card -->
+          <div class="glass-card pillar-card" onclick="window.switchView('investments')">
+            <div class="pillar-card-header">
+              <div class="pillar-title-group">
+                <div class="pillar-icon-badge badge-invest">📈</div>
+                <div>
+                  <h3 class="pillar-title">Investment</h3>
+                  <span class="pillar-subtitle">Manual Holdings & Recurring SIPs</span>
+                </div>
               </div>
-              <div class="chart-header-actions">
-                <button class="time-pill" data-timeframe="1W">1W</button>
-                <button class="time-pill" data-timeframe="1M">1M</button>
-                <button class="time-pill" data-timeframe="3M">3M</button>
-                <button class="time-pill active" data-timeframe="1Y">1Y</button>
-                <button class="time-pill" data-timeframe="ALL">ALL</button>
+              <span class="pillar-view-arrow">→</span>
+            </div>
+
+            <div class="pillar-metrics">
+              <div class="pillar-metric-main">
+                <span class="metric-label">Current Portfolio Value</span>
+                <div class="metric-val-large mono-num" id="overviewInvestValue">₹0</div>
+              </div>
+
+              <div class="pillar-subgrid">
+                <div class="pillar-stat">
+                  <span class="stat-label">Total Invested</span>
+                  <span class="stat-value mono-num" id="overviewInvestCost">₹0</span>
+                </div>
+                <div class="pillar-stat">
+                  <span class="stat-label">All-Time Returns</span>
+                  <span class="stat-value mono-num" id="overviewInvestReturn">+₹0 (+0.0%)</span>
+                </div>
+                <div class="pillar-stat">
+                  <span class="stat-label">Active SIPs</span>
+                  <span class="stat-value mono-num" id="overviewActiveSipCount">0 active</span>
+                </div>
+                <div class="pillar-stat">
+                  <span class="stat-label">Monthly SIP Total</span>
+                  <span class="stat-value mono-num" id="overviewMonthlySipCommit">₹0/mo</span>
+                </div>
               </div>
             </div>
-            <div class="chart-container">
-              <canvas id="performanceChart"></canvas>
+
+            <div class="pillar-card-footer">
+              <span class="footer-hint">Click to view portfolio, manual holdings & SIP details</span>
             </div>
           </div>
 
-          <!-- Asset Allocation Card -->
+          <!-- 2. Loans Overview Card -->
+          <div class="glass-card pillar-card" onclick="window.switchView('loans')">
+            <div class="pillar-card-header">
+              <div class="pillar-title-group">
+                <div class="pillar-icon-badge badge-loans">💳</div>
+                <div>
+                  <h3 class="pillar-title">Loans</h3>
+                  <span class="pillar-subtitle">Principal, Paid So Far & Remaining</span>
+                </div>
+              </div>
+              <span class="pillar-view-arrow">→</span>
+            </div>
+
+            <div class="pillar-metrics">
+              <div class="pillar-metric-main">
+                <span class="metric-label">Total Remaining Balance</span>
+                <div class="metric-val-large mono-num" id="overviewLoansRemaining">₹0</div>
+              </div>
+
+              <div class="pillar-progress-block">
+                <div class="progress-labels">
+                  <span>Paid So Far: <strong class="mono-num" id="overviewLoansPaid">₹0</strong></span>
+                  <span id="overviewLoansProgressPct">0% Repaid</span>
+                </div>
+                <div class="progress-track">
+                  <div class="progress-fill progress-loan" id="overviewLoansProgressBar" style="width: 0%;"></div>
+                </div>
+              </div>
+
+              <div class="pillar-subgrid">
+                <div class="pillar-stat">
+                  <span class="stat-label">Active Loans</span>
+                  <span class="stat-value mono-num" id="overviewActiveLoanCount">0</span>
+                </div>
+                <div class="pillar-stat">
+                  <span class="stat-label">Monthly EMI Commitment</span>
+                  <span class="stat-value mono-num" id="overviewMonthlyEmi">₹0/mo</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="pillar-card-footer">
+              <span class="footer-hint">Click for loan schedule, amortisation & payoff details</span>
+            </div>
+          </div>
+
+          <!-- 3. Savings Overview Card -->
+          <div class="glass-card pillar-card" onclick="window.switchView('savings')">
+            <div class="pillar-card-header">
+              <div class="pillar-title-group">
+                <div class="pillar-icon-badge badge-savings">🛡️</div>
+                <div>
+                  <h3 class="pillar-title">Savings</h3>
+                  <span class="pillar-subtitle">Emergency Fund & Financial Goals</span>
+                </div>
+              </div>
+              <span class="pillar-view-arrow">→</span>
+            </div>
+
+            <div class="pillar-metrics">
+              <div class="pillar-metric-main">
+                <span class="metric-label">Total Accumulated Savings</span>
+                <div class="metric-val-large mono-num" id="overviewSavingsTotal">₹0</div>
+              </div>
+
+              <div class="pillar-subgrid">
+                <div class="pillar-stat">
+                  <span class="stat-label">Emergency Fund</span>
+                  <span class="stat-value mono-num" id="overviewEmergencyFundVal">₹0</span>
+                </div>
+                <div class="pillar-stat">
+                  <span class="stat-label">Runway Health</span>
+                  <span class="stat-value mono-num" id="overviewEmergencyRunway">0.0 Months</span>
+                </div>
+                <div class="pillar-stat">
+                  <span class="stat-label">Active Goals</span>
+                  <span class="stat-value mono-num" id="overviewGoalsCount">0 Goals</span>
+                </div>
+                <div class="pillar-stat">
+                  <span class="stat-label">Goals Target Funded</span>
+                  <span class="stat-value mono-num" id="overviewGoalsFundedPct">0%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="pillar-card-footer">
+              <span class="footer-hint">Click to manage emergency fund & goal milestones</span>
+            </div>
+          </div>
+
+          <!-- 4. Expense Overview Card -->
+          <div class="glass-card pillar-card" onclick="window.switchView('expenses')">
+            <div class="pillar-card-header">
+              <div class="pillar-title-group">
+                <div class="pillar-icon-badge badge-expense">💸</div>
+                <div>
+                  <h3 class="pillar-title">Expense</h3>
+                  <span class="pillar-subtitle">Current Month vs Previous Month</span>
+                </div>
+              </div>
+              <span class="pillar-view-arrow">→</span>
+            </div>
+
+            <div class="pillar-metrics">
+              <div class="pillar-metric-main">
+                <span class="metric-label" id="overviewCurrentMonthLabel">Current Month Total</span>
+                <div class="metric-val-large mono-num" id="overviewExpenseCurrentMonth">₹0</div>
+              </div>
+
+              <div class="pillar-subgrid">
+                <div class="pillar-stat">
+                  <span class="stat-label" id="overviewPrevMonthLabel">Previous Month Total</span>
+                  <span class="stat-value mono-num" id="overviewExpensePrevMonth">₹0</span>
+                </div>
+                <div class="pillar-stat">
+                  <span class="stat-label">Month-over-Month Delta</span>
+                  <span class="stat-value mono-num" id="overviewExpenseMoMDelta">₹0 (0.0%)</span>
+                </div>
+                <div class="pillar-stat">
+                  <span class="stat-label">Daily Avg (This Month)</span>
+                  <span class="stat-value mono-num" id="overviewExpenseDailyAvg">₹0/day</span>
+                </div>
+                <div class="pillar-stat">
+                  <span class="stat-label">Top Category</span>
+                  <span class="stat-value" id="overviewExpenseTopCategory">—</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="pillar-card-footer">
+              <span class="footer-hint">Click to add daily expense, see trends & analytics</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Overview Snapshot Charts Row -->
+        <div class="overview-charts-grid">
+          <!-- Asset vs Liabilities Breakdown Chart -->
           <div class="glass-card">
             <div class="card-header">
               <div>
-                <h3 class="card-title"><span>🥧</span> Asset Allocation</h3>
-                <span class="card-subtitle">Diversification across categories</span>
+                <h3 class="card-title"><span>⚖️</span> Wealth Composition</h3>
+                <span class="card-subtitle">Investments & Savings vs Outstanding Loans</span>
               </div>
             </div>
-            <div style="height: 180px; position: relative;">
-              <canvas id="allocationChart"></canvas>
+            <div style="height: 220px; position: relative;">
+              <canvas id="overviewCompositionChart"></canvas>
             </div>
-            <div class="allocation-breakdown" id="allocationList">
+          </div>
+
+          <!-- Cashflow & Monthly Commitments Chart -->
+          <div class="glass-card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title"><span>📊</span> Monthly Cashflow Commitments</h3>
+                <span class="card-subtitle">Monthly SIPs + Loan EMIs + Current Expenses</span>
+              </div>
+            </div>
+            <div style="height: 220px; position: relative;">
+              <canvas id="overviewCashflowChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ====================================================================
+           SECTION 2: INVESTMENT (MANUAL HOLDINGS & SIP PLANS)
+           ==================================================================== -->
+      <section id="view-investments" class="view-section">
+        
+        <!-- Investment Header Stats -->
+        <div class="metrics-grid">
+          <div class="glass-card metric-card">
+            <div class="metric-card-top">
+              <span class="metric-label">Total Portfolio Value</span>
+              <div class="metric-icon-badge">💎</div>
+            </div>
+            <div class="metric-value mono-num" id="investMetricTotalValue">₹0</div>
+            <div class="metric-footer">
+              <span style="color: var(--text-muted);">Combined Manual Holdings + SIPs</span>
+            </div>
+          </div>
+
+          <div class="glass-card metric-card">
+            <div class="metric-card-top">
+              <span class="metric-label">Total Capital Invested</span>
+              <div class="metric-icon-badge">💰</div>
+            </div>
+            <div class="metric-value mono-num" id="investMetricInvestedCost">₹0</div>
+            <div class="metric-footer">
+              <span style="color: var(--text-muted);">Principal amount invested</span>
+            </div>
+          </div>
+
+          <div class="glass-card metric-card">
+            <div class="metric-card-top">
+              <span class="metric-label">All-Time Returns</span>
+              <div class="metric-icon-badge">📈</div>
+            </div>
+            <div class="metric-value mono-num" id="investMetricTotalGain">+₹0</div>
+            <div class="metric-footer">
+              <span id="investBadgeTotalGain" class="badge badge-success">+0.00%</span>
+              <span style="color: var(--text-muted); font-size: 0.78rem;">Net P&L</span>
+            </div>
+          </div>
+
+          <div class="glass-card metric-card">
+            <div class="metric-card-top">
+              <span class="metric-label">Monthly SIP Commitment</span>
+              <div class="metric-icon-badge">🔄</div>
+            </div>
+            <div class="metric-value mono-num" id="investMetricMonthlySip">₹0</div>
+            <div class="metric-footer">
+              <span style="color: var(--text-muted); font-size: 0.78rem;">Auto recurring per month</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section Navigation Sub-Tabs -->
+        <div class="subtabs-bar">
+          <div class="subtabs-list">
+            <button class="subtab-btn active" data-subtab="manual-holdings" onclick="window.switchInvestSubtab('manual-holdings')">
+              <span>💼</span> Manual / Lump Sum Holdings (<span id="countManualHoldings">0</span>)
+            </button>
+            <button class="subtab-btn" data-subtab="sip-plans" onclick="window.switchInvestSubtab('sip-plans')">
+              <span>🔄</span> SIP Systematic Plans (<span id="countSipPlans">0</span>)
+            </button>
+            <button class="subtab-btn" data-subtab="sip-calculator" onclick="window.switchInvestSubtab('sip-calculator')">
+              <span>🧮</span> SIP Growth Calculator
+            </button>
+          </div>
+
+          <div class="subtabs-actions">
+            <button class="quick-btn btn-secondary btn-sm" onclick="window.openHoldingModal()">
+              <span>+ Add Manual Asset</span>
+            </button>
+            <button class="quick-btn btn-primary btn-sm" onclick="window.openSipModal()">
+              <span>+ Add New SIP</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- SUBTAB 1: MANUAL HOLDINGS -->
+        <div id="invest-tab-manual-holdings" class="invest-subtab-content active">
+          <!-- Filter & Search Controls -->
+          <div class="filter-bar">
+            <div class="search-box">
+              <span>🔍</span>
+              <input type="text" id="holdingSearchInput" placeholder="Search by asset name, ticker, or sector...">
+            </div>
+
+            <div class="filter-pills" id="holdingsFilterPills">
+              <button class="filter-btn active" data-category="all">All</button>
+              <button class="filter-btn" data-category="stock">Stocks</button>
+              <button class="filter-btn" data-category="etf">Mutual Funds & ETFs</button>
+              <button class="filter-btn" data-category="commodity">Gold & Silver</button>
+              <button class="filter-btn" data-category="cash">Fixed & Savings</button>
+              <button class="filter-btn" data-category="crypto">Crypto</button>
+              <button class="filter-btn" data-category="real-estate">Real Estate</button>
+            </div>
+          </div>
+
+          <!-- Holdings Table -->
+          <div class="table-wrapper">
+            <table class="data-table" id="holdingsTable">
+              <thead>
+                <tr>
+                  <th data-sort="name">Asset / Scheme ⇕</th>
+                  <th>Category</th>
+                  <th data-sort="quantity">Units</th>
+                  <th>Avg Buy / NAV</th>
+                  <th data-sort="price">Current Price ⇕</th>
+                  <th data-sort="value">Current Value ⇕</th>
+                  <th data-sort="gain">Gain / (Loss) ⇕</th>
+                  <th data-sort="allocation">% Portfolio ⇕</th>
+                  <th style="text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="holdingsTableBody">
+                <!-- Dynamically populated rows -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- SUBTAB 2: SIP PLANS (SEPARATE OPTION FOR EACH INVESTMENT) -->
+        <div id="invest-tab-sip-plans" class="invest-subtab-content">
+          <div class="sip-plans-header">
+            <div>
+              <h3 style="font-size: 1.15rem; font-weight: 700;">🔄 Systematic Investment Plans (SIPs)</h3>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 2px;">Manage separate recurring SIPs for each investment scheme, track total installments paid, and log monthly SIP deposits.</p>
+            </div>
+            <button class="quick-btn btn-primary" onclick="window.openSipModal()">
+              <span>+ Create New SIP</span>
+            </button>
+          </div>
+
+          <div class="sip-cards-grid" id="sipCardsGrid">
+            <!-- Dynamically populated SIP cards -->
+          </div>
+        </div>
+
+        <!-- SUBTAB 3: SIP CALCULATOR & PROJECTION -->
+        <div id="invest-tab-sip-calculator" class="invest-subtab-content">
+          <div class="calculator-card glass-card">
+            <div class="calc-header">
+              <h3>🧮 Interactive SIP Future Value Calculator</h3>
+              <p style="font-size: 0.85rem; color: var(--text-secondary);">Simulate wealth compounding based on monthly SIP, expected annual return %, and investment duration.</p>
+            </div>
+
+            <div class="calc-grid">
+              <div class="calc-inputs">
+                <div class="form-group">
+                  <label>Monthly Investment Amount (₹): <strong id="calcAmountVal" class="mono-num">₹10,000</strong></label>
+                  <input type="range" id="calcMonthlyAmount" min="500" max="200000" step="500" value="10000" class="form-range" oninput="window.updateSipCalc()">
+                </div>
+
+                <div class="form-group">
+                  <label>Expected Return Rate (% p.a.): <strong id="calcRateVal" class="mono-num">12%</strong></label>
+                  <input type="range" id="calcReturnRate" min="1" max="30" step="0.5" value="12" class="form-range" oninput="window.updateSipCalc()">
+                </div>
+
+                <div class="form-group">
+                  <label>Time Period (Years): <strong id="calcYearsVal" class="mono-num">10 Years</strong></label>
+                  <input type="range" id="calcDurationYears" min="1" max="35" step="1" value="10" class="form-range" oninput="window.updateSipCalc()">
+                </div>
+              </div>
+
+              <div class="calc-results">
+                <div class="calc-result-stat">
+                  <span>Invested Capital</span>
+                  <strong id="calcTotalInvested" class="mono-num">₹12,00,000</strong>
+                </div>
+                <div class="calc-result-stat">
+                  <span>Estimated Wealth Gain</span>
+                  <strong id="calcEstimatedGain" class="mono-num" style="color: var(--success);">₹11,23,391</strong>
+                </div>
+                <div class="calc-result-stat highlight">
+                  <span>Total Maturity Value</span>
+                  <strong id="calcTotalMaturity" class="mono-num">₹23,23,391</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Investment Asset Allocation Chart -->
+        <div class="glass-card" style="margin-top: 20px;">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title"><span>🥧</span> Asset Allocation Breakdown</h3>
+              <span class="card-subtitle">Diversification across asset classes</span>
+            </div>
+          </div>
+          <div class="allocation-layout">
+            <div style="height: 200px; max-width: 280px; position: relative;">
+              <canvas id="investAllocationChart"></canvas>
+            </div>
+            <div class="allocation-breakdown" id="investAllocationList">
               <!-- Dynamically populated categories -->
             </div>
           </div>
         </div>
 
-        <!-- Overview Quick Highlights -->
-        <div class="highlights-grid">
-          <div class="glass-card" style="display: flex; align-items: center; justify-content: space-between;">
-            <div>
-              <span class="card-subtitle" style="text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">Top Performing Holding</span>
-              <h4 id="highlightTopPerformerName" style="font-size: 1.15rem; margin-top: 4px;">SBI PSU Direct Plan</h4>
-            </div>
-            <span id="highlightTopPerformerReturn" class="badge badge-success" style="font-size: 0.95rem; padding: 6px 12px;">+₹3,713 (+7.50%)</span>
-          </div>
-
-          <div class="glass-card" style="display: flex; align-items: center; justify-content: space-between;">
-            <div>
-              <span class="card-subtitle" style="text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">Next Month Update</span>
-              <h4 style="font-size: 1.05rem; margin-top: 4px;">Log September 2026 data</h4>
-            </div>
-            <button class="quick-btn btn-primary" style="width: auto; padding: 8px 16px;" onclick="window.switchView('add-monthly')">
-              <span>Open Form 📝</span>
-            </button>
-          </div>
-        </div>
       </section>
 
       <!-- ====================================================================
-           SECTION 2: HOLDINGS
+           SECTION: ASSETS (VEHICLES, GOLD, REAL ESTATE, MAJOR PHYSICAL ASSETS)
            ==================================================================== -->
-      <section id="view-holdings" class="view-section">
-        <!-- Filter & Search Controls -->
+      <section id="view-assets" class="view-section">
+        
+        <!-- Assets Summary Stats -->
+        <div class="metrics-grid">
+          <div class="glass-card metric-card">
+            <div class="metric-card-top">
+              <span class="metric-label">Total Assets Valuation</span>
+              <div class="metric-icon-badge" style="background: rgba(245, 158, 11, 0.15); color: var(--accent-amber);">🏛️</div>
+            </div>
+            <div class="metric-value mono-num" id="assetsMetricTotalValue">₹0</div>
+            <div class="metric-footer">
+              <span style="color: var(--text-muted);">Current estimated market value</span>
+            </div>
+          </div>
+
+          <div class="glass-card metric-card">
+            <div class="metric-card-top">
+              <span class="metric-label">Vehicles Value</span>
+              <div class="metric-icon-badge" style="background: rgba(99, 102, 241, 0.15); color: var(--accent-primary);">🚗</div>
+            </div>
+            <div class="metric-value mono-num" id="assetsMetricVehicles">₹0</div>
+            <div class="metric-footer">
+              <span style="color: var(--text-muted);">14L Car & Duke 250</span>
+            </div>
+          </div>
+
+          <div class="glass-card metric-card">
+            <div class="metric-card-top">
+              <span class="metric-label">Physical Gold & Metals</span>
+              <div class="metric-icon-badge" style="background: rgba(234, 179, 8, 0.15); color: #eab308);">🪙</div>
+            </div>
+            <div class="metric-value mono-num" id="assetsMetricGold">₹0</div>
+            <div class="metric-footer">
+              <span style="color: var(--text-muted);">25 Grams Physical Gold</span>
+            </div>
+          </div>
+
+          <div class="glass-card metric-card">
+            <div class="metric-card-top">
+              <span class="metric-label">Total Purchase Cost</span>
+              <div class="metric-icon-badge" style="background: rgba(16, 185, 129, 0.15); color: var(--success);">🧾</div>
+            </div>
+            <div class="metric-value mono-num" id="assetsMetricCost">₹0</div>
+            <div class="metric-footer">
+              <span style="color: var(--text-muted);">Original capital outlay</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Assets Action Bar -->
+        <div class="section-actions-bar">
+          <div>
+            <h2 style="font-size: 1.25rem;">Physical & Tangible Assets</h2>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 2px;">Track tangible wealth including vehicles, physical gold, real estate, and major assets contributing to your real net worth.</p>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span class="badge badge-neutral" id="assetsCountBadge">0 Assets</span>
+            <button class="quick-btn btn-primary" onclick="window.openAssetModal()">
+              <span>+ Add Physical Asset</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Assets Filter Bar -->
         <div class="filter-bar">
           <div class="search-box">
             <span>🔍</span>
-            <input type="text" id="holdingSearchInput" placeholder="Search by name, symbol, or sector...">
+            <input type="text" id="assetSearchInput" placeholder="Search assets by name or category..." oninput="window.renderAssetsView()">
           </div>
 
-          <div class="filter-pills" id="holdingsFilterPills">
-            <button class="filter-btn active" data-category="all">All (13)</button>
-            <button class="filter-btn" data-category="stock">Stocks</button>
-            <button class="filter-btn" data-category="etf">Mutual Funds & ETFs</button>
-            <button class="filter-btn" data-category="commodity">Gold & Silver</button>
-            <button class="filter-btn" data-category="cash">Fixed & Savings</button>
+          <div class="filter-pills" id="assetsFilterPills">
+            <button class="filter-btn active" data-category="all" onclick="window.filterAssetCategory('all')">All</button>
+            <button class="filter-btn" data-category="vehicle" onclick="window.filterAssetCategory('vehicle')">🚗 Vehicles</button>
+            <button class="filter-btn" data-category="gold" onclick="window.filterAssetCategory('gold')">🪙 Gold & Jewelry</button>
+            <button class="filter-btn" data-category="property" onclick="window.filterAssetCategory('property')">🏠 Real Estate</button>
+            <button class="filter-btn" data-category="other" onclick="window.filterAssetCategory('other')">💼 Other</button>
+          </div>
+        </div>
+
+        <!-- Assets Cards Grid -->
+        <div class="assets-grid" id="assetsGrid">
+          <!-- Dynamically populated asset cards -->
+        </div>
+
+      </section>
+
+      <!-- ====================================================================
+           SECTION 3: LOANS (PRINCIPAL, TENURE, INTEREST %, PAID & REMAINING)
+           ==================================================================== -->
+      <section id="view-loans" class="view-section">
+        
+        <!-- Loans Summary Stats -->
+        <div class="metrics-grid">
+          <div class="glass-card metric-card">
+            <div class="metric-card-top">
+              <span class="metric-label">Total Remaining Debt</span>
+              <div class="metric-icon-badge" style="background: rgba(244, 63, 94, 0.15); color: var(--danger);">💳</div>
+            </div>
+            <div class="metric-value mono-num" id="loansMetricRemaining">₹0</div>
+            <div class="metric-footer">
+              <span style="color: var(--text-muted);">Principal amount left to pay</span>
+            </div>
           </div>
 
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <span class="badge badge-neutral" id="holdingsCountBadge">13 Holdings</span>
-            <button class="quick-btn btn-primary" style="width: auto; padding: 8px 16px;" onclick="window.openHoldingModal()">
-              <span>+ Add Asset</span>
+          <div class="glass-card metric-card">
+            <div class="metric-card-top">
+              <span class="metric-label">Total Paid So Far</span>
+              <div class="metric-icon-badge" style="background: rgba(16, 185, 129, 0.15); color: var(--success);">✅</div>
+            </div>
+            <div class="metric-value mono-num" id="loansMetricPaidSoFar">₹0</div>
+            <div class="metric-footer">
+              <span id="loansBadgePaidPct" class="badge badge-success">0% Paid</span>
+              <span style="color: var(--text-muted); font-size: 0.78rem;">Principal + Interest</span>
+            </div>
+          </div>
+
+          <div class="glass-card metric-card">
+            <div class="metric-card-top">
+              <span class="metric-label">Total Original Borrowed</span>
+              <div class="metric-icon-badge">🏦</div>
+            </div>
+            <div class="metric-value mono-num" id="loansMetricTotalPrincipal">₹0</div>
+            <div class="metric-footer">
+              <span style="color: var(--text-muted); font-size: 0.78rem;">Cumulative original principal</span>
+            </div>
+          </div>
+
+          <div class="glass-card metric-card">
+            <div class="metric-card-top">
+              <span class="metric-label">Monthly EMI Commitment</span>
+              <div class="metric-icon-badge">🗓️</div>
+            </div>
+            <div class="metric-value mono-num" id="loansMetricMonthlyEmi">₹0</div>
+            <div class="metric-footer">
+              <span style="color: var(--text-muted); font-size: 0.78rem;">Monthly debt obligation</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Loans Action Bar -->
+        <div class="section-actions-bar">
+          <div>
+            <h2 style="font-size: 1.25rem;">Active Loans & Debt Tracker</h2>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 2px;">Enter loan amount, tenure and interest % to see real-time paid so far, remaining balance, and full amortisation schedule.</p>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span class="badge badge-neutral" id="loansCountBadge">0 Loans</span>
+            <button class="quick-btn btn-primary" onclick="window.openLoanModal()">
+              <span>+ Add New Loan</span>
             </button>
           </div>
         </div>
 
-        <!-- Holdings Table -->
-        <div class="table-wrapper">
-          <table class="data-table" id="holdingsTable">
-            <thead>
-              <tr>
-                <th data-sort="name">Asset / Scheme ⇕</th>
-                <th>Category</th>
-                <th data-sort="quantity">Units</th>
-                <th>Avg Buy / NAV</th>
-                <th data-sort="price">Current Price ⇕</th>
-                <th data-sort="value">Current Value (₹) ⇕</th>
-                <th data-sort="gain">Gain / (Loss) ⇕</th>
-                <th data-sort="allocation">% Portfolio ⇕</th>
-                <th style="text-align: right;">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="holdingsTableBody">
-              <!-- Dynamically populated rows -->
-            </tbody>
-          </table>
+        <!-- Loans Cards Grid -->
+        <div class="loans-grid" id="loansGrid">
+          <!-- Dynamically populated loan cards -->
         </div>
+
       </section>
 
       <!-- ====================================================================
-           SECTION 3: DEDICATED "ADD MONTHLY UPDATE" TAB
+           SECTION 4: SAVINGS (EMERGENCY FUND & FINANCIAL GOALS)
            ==================================================================== -->
-      <section id="view-add-monthly" class="view-section">
-        <div class="glass-card entry-header-card">
-          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
-            <div>
-              <h2 style="font-size: 1.35rem; font-weight: 800;">➕ Record Next Month's Investment Data</h2>
-              <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 3px;">Enter current values & units for each asset category. Updates your live portfolio, recalculates all analytics, and syncs to Google Sheets.</p>
+      <section id="view-savings" class="view-section">
+        
+        <!-- Savings Summary Header -->
+        <div class="metrics-grid">
+          <div class="glass-card metric-card">
+            <div class="metric-card-top">
+              <span class="metric-label">Total Liquid Savings</span>
+              <div class="metric-icon-badge">🛡️</div>
             </div>
+            <div class="metric-value mono-num" id="savingsMetricTotal">₹0</div>
+            <div class="metric-footer">
+              <span style="color: var(--text-muted);">Emergency Fund + Saved for Goals</span>
+            </div>
+          </div>
 
-            <div style="display: flex; align-items: center; gap: 12px;">
-              <div class="form-group" style="margin: 0;">
-                <label for="entryMonthSelect" style="font-size: 0.72rem; color: var(--text-muted);">Month & Year:</label>
-                <input type="month" id="entryMonthSelect" value="2026-09" class="form-input" style="padding: 6px 12px; font-weight: 700;">
+          <div class="glass-card metric-card">
+            <div class="metric-card-top">
+              <span class="metric-label">Emergency Fund</span>
+              <div class="metric-icon-badge">🚨</div>
+            </div>
+            <div class="metric-value mono-num" id="savingsMetricEmergency">₹0</div>
+            <div class="metric-footer">
+              <span id="savingsBadgeEmergencyRunway" class="badge badge-info">0 Months Runway</span>
+            </div>
+          </div>
+
+          <div class="glass-card metric-card">
+            <div class="metric-card-top">
+              <span class="metric-label">Total Goals Target</span>
+              <div class="metric-icon-badge">🎯</div>
+            </div>
+            <div class="metric-value mono-num" id="savingsMetricGoalsTarget">₹0</div>
+            <div class="metric-footer">
+              <span id="savingsBadgeGoalsFunded" class="badge badge-success">0% Funded</span>
+            </div>
+          </div>
+
+          <div class="glass-card metric-card">
+            <div class="metric-card-top">
+              <span class="metric-label">Active Milestones</span>
+              <div class="metric-icon-badge">🏆</div>
+            </div>
+            <div class="metric-value mono-num" id="savingsMetricGoalsCount">0</div>
+            <div class="metric-footer">
+              <span style="color: var(--text-muted); font-size: 0.78rem;">Financial targets in progress</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- PART A: EMERGENCY FUND CARD -->
+        <div class="glass-card emergency-fund-card">
+          <div class="emergency-fund-header">
+            <div class="emergency-title-group">
+              <div class="emergency-icon-badge">🛡️</div>
+              <div>
+                <h3 style="font-size: 1.2rem; font-weight: 800;">Emergency Safety Net</h3>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 2px;">Dedicated reserve to cover unforeseen expenses & living costs.</p>
               </div>
-
-              <button class="quick-btn btn-primary" style="padding: 10px 20px; font-size: 0.95rem; margin-top: 14px;" onclick="window.handleSaveMonthlyEntry()">
-                <span>💾 Save & Record Snapshot</span>
+            </div>
+            <div class="emergency-actions">
+              <button class="quick-btn btn-secondary btn-sm" onclick="window.openEmergencyFundModal()">
+                <span>✏️ Adjust Fund / Target</span>
               </button>
             </div>
           </div>
 
-          <!-- Live Running Totals Banner -->
-          <div class="entry-live-banner">
-            <div class="entry-live-stat">
-              <span>Calculated Net Worth</span>
-              <strong id="entryLiveNetWorth" style="color: var(--text-primary);">₹0</strong>
+          <div class="emergency-body-grid">
+            <div class="emergency-stat-box">
+              <span class="box-label">Current Emergency Savings</span>
+              <strong class="box-value mono-num" id="efCurrentAmount">₹0</strong>
+              <span class="box-sub">Target: <span class="mono-num" id="efTargetAmount">₹0</span></span>
             </div>
-            <div class="entry-live-stat">
-              <span>Total Capital Invested</span>
-              <strong id="entryLiveInvested" style="color: var(--accent-primary);">₹0</strong>
+
+            <div class="emergency-stat-box">
+              <span class="box-label">Expense Runway</span>
+              <strong class="box-value mono-num" id="efRunwayMonths">0.0 Months</strong>
+              <span class="box-sub">Based on average monthly expense of <span class="mono-num" id="efAvgMonthlyExpense">₹0</span></span>
             </div>
-            <div class="entry-live-stat">
-              <span>Total Unrealized Return</span>
-              <strong id="entryLiveGain" style="color: var(--success);">+₹0</strong>
+
+            <div class="emergency-stat-box">
+              <span class="box-label">Safety Status</span>
+              <div id="efStatusBadge" class="status-indicator-badge status-healthy">
+                <span>🛡️ Healthy Buffer</span>
+              </div>
+              <span class="box-sub" id="efStatusTip">Recommended: 6 months of expenses</span>
+            </div>
+          </div>
+
+          <div class="emergency-progress-wrap">
+            <div class="progress-labels">
+              <span>Fund Progress: <strong id="efProgressPct">0%</strong></span>
+              <span><span id="efRemainingToTarget">₹0</span> needed to reach target</span>
+            </div>
+            <div class="progress-track" style="height: 10px;">
+              <div class="progress-fill progress-emerald" id="efProgressBar" style="width: 0%;"></div>
             </div>
           </div>
         </div>
 
-        <!-- Form Containers organized by categories -->
-        <div id="monthlyEntryFormContainer">
-          <!-- Dynamically populated category forms -->
-        </div>
-
-        <div style="margin-top: 24px; text-align: right;">
-          <button class="quick-btn btn-primary" style="padding: 12px 28px; font-size: 1rem;" onclick="window.handleSaveMonthlyEntry()">
-            <span>💾 Save & Record Monthly Snapshot</span>
-          </button>
-        </div>
-      </section>
-
-      <!-- ====================================================================
-           SECTION 4: GOALS
-           ==================================================================== -->
-      <section id="view-goals" class="view-section">
-        <div class="monthly-header-actions">
+        <!-- PART B: FINANCIAL GOALS -->
+        <div class="section-actions-bar" style="margin-top: 30px;">
           <div>
-            <h2 style="font-size: 1.25rem;">Financial Milestones & Targets</h2>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">Track emergency funds, target wealth milestones, and savings goals with live progress bars.</p>
+            <h2 style="font-size: 1.25rem;">Financial Goals & Targets</h2>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 2px;">Track target dates, required monthly savings, and celebrate milestone achievements.</p>
           </div>
 
           <div style="display: flex; align-items: center; gap: 12px;">
-            <span class="badge badge-neutral" id="goalsCountBadge">4 Goals</span>
-            <button class="quick-btn btn-primary" style="width: auto; padding: 8px 16px;" onclick="window.openGoalModal()">
-              <span>+ Create Goal</span>
+            <button class="quick-btn btn-primary" onclick="window.openGoalModal()">
+              <span>+ Create New Goal</span>
             </button>
           </div>
         </div>
@@ -380,58 +890,172 @@
         <div class="goals-grid" id="goalsGrid">
           <!-- Dynamically populated goal cards -->
         </div>
+
       </section>
 
       <!-- ====================================================================
-           SECTION 5: MONTHLY REVIEW
+           SECTION 5: EXPENSE (DAILY EXPENSES & CURRENT VS PREVIOUS MONTH)
            ==================================================================== -->
-      <section id="view-monthly" class="view-section">
-        <div class="monthly-header-actions">
-          <div>
-            <h2 style="font-size: 1.25rem;">Monthly Review & Growth Ledger</h2>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">Track month-over-month capital contributions, market appreciation, and investment reflections.</p>
-          </div>
-
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <span class="badge badge-neutral" id="monthlyCountBadge">1 Month</span>
-            <button class="quick-btn btn-primary" style="width: auto; padding: 8px 16px;" onclick="window.switchView('add-monthly')">
-              <span>+ Add Monthly Update</span>
+      <section id="view-expenses" class="view-section">
+        
+        <!-- PROMINENT CURRENT VS PREVIOUS MONTH COMPARISON WIDGET -->
+        <div class="glass-card expense-comparison-hero">
+          <div class="comparison-hero-header">
+            <div>
+              <span class="badge badge-neutral" style="text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Month-over-Month Comparison</span>
+              <h2 style="font-size: 1.35rem; font-weight: 800; margin-top: 4px;">Expense Tracking & Cashflow Analysis</h2>
+            </div>
+            <button class="quick-btn btn-primary" onclick="window.openExpenseModal()">
+              <span>➕ Add Daily Expense</span>
             </button>
           </div>
-        </div>
 
-        <!-- Monthly Contributions vs Market Gains Chart -->
-        <div class="glass-card monthly-chart-card">
-          <div class="card-header">
-            <div>
-              <h3 class="card-title"><span>📊</span> Monthly Net Worth Progression</h3>
-              <span class="card-subtitle">Month-by-month portfolio growth</span>
+          <div class="comparison-cards-grid">
+            <!-- Current Month Card -->
+            <div class="comparison-col current-month-col">
+              <span class="comp-label" id="labelCurrentMonth">Current Month (Aug 2026)</span>
+              <div class="comp-value mono-num" id="expenseTotalCurrentMonth">₹0</div>
+              <div class="comp-substats">
+                <span>Daily Average: <strong class="mono-num" id="expenseDailyAvgCurrent">₹0/day</strong></span>
+                <span>Transactions: <strong class="mono-num" id="expenseTxCountCurrent">0</strong></span>
+              </div>
+            </div>
+
+            <!-- VS Delta Badge -->
+            <div class="comparison-delta-col">
+              <div class="vs-badge">VS</div>
+              <div id="expenseDeltaBadge" class="delta-badge badge-neutral">
+                <span id="expenseDeltaIcon">⚖️</span>
+                <span id="expenseDeltaText">₹0 (0.0%)</span>
+              </div>
+              <span class="delta-caption" id="expenseDeltaCaption">vs previous month</span>
+            </div>
+
+            <!-- Previous Month Card -->
+            <div class="comparison-col prev-month-col">
+              <span class="comp-label" id="labelPrevMonth">Previous Month (Jul 2026)</span>
+              <div class="comp-value mono-num" id="expenseTotalPrevMonth">₹0</div>
+              <div class="comp-substats">
+                <span>Daily Average: <strong class="mono-num" id="expenseDailyAvgPrev">₹0/day</strong></span>
+                <span>Transactions: <strong class="mono-num" id="expenseTxCountPrev">0</strong></span>
+              </div>
             </div>
           </div>
-          <div style="height: 280px; position: relative;">
-            <canvas id="monthlyGrowthChart"></canvas>
+        </div>
+
+        <!-- Expense Charts Row -->
+        <div class="overview-charts-grid" style="margin-top: 20px;">
+          <!-- Category Breakdown Chart -->
+          <div class="glass-card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title"><span>🥧</span> Spending by Category</h3>
+                <span class="card-subtitle" id="expenseCategoryChartSubtitle">Current Month Category Distribution</span>
+              </div>
+            </div>
+            <div style="height: 220px; position: relative;">
+              <canvas id="expenseCategoryChart"></canvas>
+            </div>
+            <div class="expense-category-tags" id="expenseCategoryTags">
+              <!-- Dynamically populated category pills -->
+            </div>
+          </div>
+
+          <!-- Daily Spending Trend Chart -->
+          <div class="glass-card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title"><span>📈</span> Daily Spending Flow</h3>
+                <span class="card-subtitle">Daily expense distribution this month</span>
+              </div>
+            </div>
+            <div style="height: 220px; position: relative;">
+              <canvas id="expenseDailyTrendChart"></canvas>
+            </div>
           </div>
         </div>
 
-        <!-- Monthly Timeline -->
-        <div class="monthly-timeline" id="monthlyTimeline">
-          <!-- Dynamically populated monthly cards -->
+        <!-- Daily Expense Ledger & Filters -->
+        <div class="glass-card" style="margin-top: 20px;">
+          <div class="card-header" style="flex-wrap: wrap; gap: 12px;">
+            <div>
+              <h3 class="card-title"><span>📝</span> Daily Expense Ledger</h3>
+              <span class="card-subtitle">Detailed record of all logged daily expenses</span>
+            </div>
+
+            <!-- Filters -->
+            <div class="expense-filter-controls">
+              <div class="control-pill">
+                <span>📅</span>
+                <select id="expenseFilterMonth" class="select-clean" onchange="window.filterExpenses()">
+                  <!-- Dynamically populated months -->
+                </select>
+              </div>
+
+              <div class="control-pill">
+                <span>🏷️</span>
+                <select id="expenseFilterCategory" class="select-clean" onchange="window.filterExpenses()">
+                  <option value="all">All Categories</option>
+                  <option value="food">🍔 Food & Dining</option>
+                  <option value="groceries">🛒 Groceries & Supermarket</option>
+                  <option value="housing">🏠 Housing & Rent</option>
+                  <option value="utilities">💡 Utilities & Bills</option>
+                  <option value="transport">🚗 Transportation & Fuel</option>
+                  <option value="shopping">🛍️ Shopping & Apparel</option>
+                  <option value="healthcare">🏥 Healthcare & Medical</option>
+                  <option value="entertainment">🎬 Entertainment & Leisure</option>
+                  <option value="education">📚 Education & Courses</option>
+                  <option value="other">💼 Other Expense</option>
+                </select>
+              </div>
+
+              <div class="search-box" style="min-width: 180px;">
+                <span>🔍</span>
+                <input type="text" id="expenseSearchInput" placeholder="Search notes..." oninput="window.filterExpenses()">
+              </div>
+
+              <button class="quick-btn btn-primary btn-sm" onclick="window.openExpenseModal()">
+                <span>+ Log Expense</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Expenses Table -->
+          <div class="table-wrapper">
+            <table class="data-table" id="expensesTable">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Category</th>
+                  <th>Description / Notes</th>
+                  <th>Payment Mode</th>
+                  <th style="text-align: right;">Amount (₹)</th>
+                  <th style="text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="expensesTableBody">
+                <!-- Dynamically populated rows -->
+              </tbody>
+            </table>
+          </div>
         </div>
+
       </section>
 
     </main>
   </div>
 
   <!-- ======================================================================
-       MODAL 1: ADD / EDIT ASSET
+       MODAL 1: ADD / EDIT MANUAL ASSET (INVESTMENT)
        ====================================================================== -->
   <div class="modal-backdrop" id="holdingModal">
     <div class="modal-window">
       <div class="modal-header">
-        <h3 id="holdingModalTitle">Add New Asset</h3>
+        <h3 id="holdingModalTitle">Add Manual Investment</h3>
         <button class="close-btn close-modal-btn" onclick="window.closeHoldingModal()">✕</button>
       </div>
       <form id="holdingForm">
+        <input type="hidden" id="holdingId" name="id">
         <div class="modal-body">
           <div class="form-row">
             <div class="form-group">
@@ -454,7 +1078,7 @@
 
           <div class="form-group">
             <label for="holdingName">Asset / Scheme Full Name *</label>
-            <input type="text" id="holdingName" name="name" class="form-input" placeholder="e.g. HDFC Small Cap Fund" required>
+            <input type="text" id="holdingName" name="name" class="form-input" placeholder="e.g. HDFC Flexi Cap Fund - Direct Plan" required>
           </div>
 
           <div class="form-row">
@@ -474,8 +1098,8 @@
           </div>
 
           <div class="form-group">
-            <label for="holdingNotes">Sector / Notes / Strategy</label>
-            <textarea id="holdingNotes" name="notes" class="form-textarea" placeholder="e.g. Sector: IT | Long term SIP"></textarea>
+            <label for="holdingNotes">Notes / Strategy</label>
+            <textarea id="holdingNotes" name="notes" class="form-textarea" placeholder="e.g. Long term core holding"></textarea>
           </div>
         </div>
 
@@ -488,70 +1112,346 @@
   </div>
 
   <!-- ======================================================================
-       MODAL 2: GOOGLE APPS SCRIPT / SHEETS SYNC
+       MODAL 2: ADD / EDIT SIP (SYSTEMATIC INVESTMENT PLAN)
        ====================================================================== -->
-  <div class="modal-backdrop" id="sheetsModal">
+  <div class="modal-backdrop" id="sipModal">
     <div class="modal-window">
       <div class="modal-header">
-        <h3>☁️ Google Sheets Connection</h3>
-        <button class="close-btn close-modal-btn" onclick="window.closeSheetsModal()">✕</button>
+        <h3 id="sipModalTitle">Add Systematic Investment Plan (SIP)</h3>
+        <button class="close-btn close-modal-btn" onclick="window.closeSipModal()">✕</button>
       </div>
+      <form id="sipForm">
+        <input type="hidden" id="sipId" name="id">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="sipName">Investment / Mutual Fund Name *</label>
+            <input type="text" id="sipName" name="name" class="form-input" placeholder="e.g. Parag Parikh Flexi Cap Fund" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="sipCategory">Category *</label>
+              <select id="sipCategory" name="category" class="form-select" required>
+                <option value="etf">Mutual Fund (Equity / Hybrid)</option>
+                <option value="stock">Direct Stock SIP</option>
+                <option value="commodity">Digital Gold / Silver SIP</option>
+                <option value="cash">PPF / NPS / Recurring Deposit</option>
+                <option value="crypto">Crypto Recurring Buy</option>
+                <option value="other">Other SIP</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="sipAmount">Monthly SIP Amount (₹) *</label>
+              <input type="number" step="any" id="sipAmount" name="monthlyAmount" class="form-input" placeholder="e.g. 5000" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="sipDay">SIP Date of Month *</label>
+              <input type="number" min="1" max="31" id="sipDay" name="sipDay" class="form-input" placeholder="e.g. 5" value="5" required>
+            </div>
+            <div class="form-group">
+              <label for="sipStartDate">Start Date *</label>
+              <input type="date" id="sipStartDate" name="startDate" class="form-input" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="sipInstallmentsPaid">Installments Paid So Far (Months)</label>
+              <input type="number" min="0" id="sipInstallmentsPaid" name="installmentsPaid" class="form-input" placeholder="e.g. 10" value="1">
+            </div>
+            <div class="form-group">
+              <label for="sipInvestedAmount">Total Invested So Far (₹)</label>
+              <input type="number" step="any" id="sipInvestedAmount" name="investedAmount" class="form-input" placeholder="Leave empty for auto (Monthly × Installments)">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="sipCurrentValue">Current Accumulated Value (₹)</label>
+              <input type="number" step="any" id="sipCurrentValue" name="currentValue" class="form-input" placeholder="Leave empty for auto-calculate @ Return %">
+            </div>
+            <div class="form-group">
+              <label for="sipExpectedReturn">Expected Return (% p.a.)</label>
+              <input type="number" step="0.1" id="sipExpectedReturn" name="expectedReturn" class="form-input" placeholder="e.g. 8.2" value="12">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="sipNotes">Notes / Folio Number</label>
+            <textarea id="sipNotes" name="notes" class="form-textarea" placeholder="e.g. Folio: 98124/88 | Auto-debit from HDFC A/C"></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="quick-btn btn-secondary" onclick="window.closeSipModal()">Cancel</button>
+          <button type="submit" class="quick-btn btn-primary">Save SIP Plan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL 2B: ADD / EDIT PHYSICAL ASSET
+       ====================================================================== -->
+  <div class="modal-backdrop" id="assetModal">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 id="assetModalTitle">Add Physical Asset</h3>
+        <button class="close-btn close-modal-btn" onclick="window.closeAssetModal()">✕</button>
+      </div>
+      <form id="assetForm">
+        <input type="hidden" id="assetId" name="id">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="assetName">Asset Name / Model *</label>
+            <input type="text" id="assetName" name="name" class="form-input" placeholder="e.g. 14L Car, KTM Duke 250, 25g Gold" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="assetCategory">Category *</label>
+              <select id="assetCategory" name="category" class="form-select" required>
+                <option value="vehicle">🚗 Vehicle (Car / Bike / EV)</option>
+                <option value="gold">🪙 Physical Gold / Precious Metals</option>
+                <option value="property">🏠 Real Estate / Land / Apartment</option>
+                <option value="electronics">💻 Electronics / Hardware</option>
+                <option value="other">💼 Other Tangible Asset</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="assetIcon">Asset Emoji Icon</label>
+              <select id="assetIcon" name="icon" class="form-select">
+                <option value="🚗">🚗 Car / 4-Wheeler</option>
+                <option value="🏍️">🏍️ Bike / Motorcycle</option>
+                <option value="🪙">🪙 Gold Bullion / Coin</option>
+                <option value="💍">💍 Gold Jewelry / Precious</option>
+                <option value="🏠">🏠 House / Real Estate</option>
+                <option value="🏢">🏢 Commercial Property / Plot</option>
+                <option value="💻">💻 Tech Gadget / Hardware</option>
+                <option value="🏛️">🏛️ General Fixed Asset</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="assetPurchasePrice">Purchase Price / Cost (₹) *</label>
+              <input type="number" step="any" id="assetPurchasePrice" name="purchasePrice" class="form-input" placeholder="e.g. 1400000" required>
+            </div>
+            <div class="form-group">
+              <label for="assetCurrentValuation">Current Market Valuation (₹) *</label>
+              <input type="number" step="any" id="assetCurrentValuation" name="currentValuation" class="form-input" placeholder="e.g. 1400000" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="assetPurchaseDate">Purchase Date / Year</label>
+              <input type="date" id="assetPurchaseDate" name="purchaseDate" class="form-input">
+            </div>
+            <div class="form-group">
+              <label for="assetQuantityGrams">Quantity (if Gold/Silver in grams)</label>
+              <input type="number" step="any" id="assetQuantityGrams" name="quantityGrams" class="form-input" placeholder="e.g. 25">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="assetNotes">Notes / Specifications</label>
+            <textarea id="assetNotes" name="notes" class="form-textarea" placeholder="e.g. Bought in 2023 | Reg No: KA-01-XX-1234"></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="quick-btn btn-secondary" onclick="window.closeAssetModal()">Cancel</button>
+          <button type="submit" class="quick-btn btn-primary">Save Physical Asset</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL 3: ADD / EDIT LOAN
+       ====================================================================== -->
+  <div class="modal-backdrop" id="loanModal">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 id="loanModalTitle">Add Loan Details</h3>
+        <button class="close-btn close-modal-btn" onclick="window.closeLoanModal()">✕</button>
+      </div>
+      <form id="loanForm">
+        <input type="hidden" id="loanId" name="id">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="loanName">Loan Name / Bank *</label>
+            <input type="text" id="loanName" name="name" class="form-input" placeholder="e.g. HDFC Home Loan, Car Loan" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="loanType">Loan Type *</label>
+              <select id="loanType" name="type" class="form-select" required>
+                <option value="home">Home Loan</option>
+                <option value="vehicle">Car / Vehicle Loan</option>
+                <option value="personal">Personal Loan</option>
+                <option value="education">Education Loan</option>
+                <option value="gold">Gold Loan</option>
+                <option value="business">Business / Other Loan</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="loanPrincipal">Original Loan Amount (Principal ₹) *</label>
+              <input type="number" step="any" id="loanPrincipal" name="principal" class="form-input" placeholder="e.g. 2500000" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="loanInterestRate">Annual Interest Rate (% p.a.) *</label>
+              <input type="number" step="0.01" id="loanInterestRate" name="interestRate" class="form-input" placeholder="e.g. 8.5" required>
+            </div>
+            <div class="form-group">
+              <label for="loanTenureMonths">Tenure (in Months) *</label>
+              <input type="number" min="1" id="loanTenureMonths" name="tenureMonths" class="form-input" placeholder="e.g. 180 for 15 yrs" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="loanStartDate">Loan Start Date *</label>
+              <input type="date" id="loanStartDate" name="startDate" class="form-input" required>
+            </div>
+            <div class="form-group">
+              <label for="loanEmiDay">EMI Debit Day of Month *</label>
+              <input type="number" min="1" max="31" id="loanEmiDay" name="emiDay" class="form-input" placeholder="e.g. 5" value="5" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="loanMonthlyEmi">Monthly EMI Amount (₹)</label>
+              <input type="number" step="any" id="loanMonthlyEmi" name="monthlyEmi" class="form-input" placeholder="e.g. 20600 (or leave empty for auto)">
+            </div>
+            <div class="form-group">
+              <label for="loanExtraPrepayment">Extra Pre-payments / Lump Sum (₹)</label>
+              <input type="number" step="any" id="loanExtraPrepayment" name="extraPrepayment" class="form-input" placeholder="e.g. 50000" value="0">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="loanEmisPaidManual">Manual Override EMIs Paid (Optional)</label>
+            <input type="number" min="0" id="loanEmisPaidManual" name="emisPaidManual" class="form-input" placeholder="Leave empty for auto-update every month on 5th">
+          </div>
+
+          <div class="form-group">
+            <label for="loanNotes">Account / Notes</label>
+            <textarea id="loanNotes" name="notes" class="form-textarea" placeholder="e.g. Loan A/C: 1092837492 | Fixed ROI"></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="quick-btn btn-secondary" onclick="window.closeLoanModal()">Cancel</button>
+          <button type="submit" class="quick-btn btn-primary">Save Loan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL 4: AMORTIZATION SCHEDULE VIEWER
+       ====================================================================== -->
+  <div class="modal-backdrop" id="amortizationModal">
+    <div class="modal-window modal-wide">
+      <div class="modal-header">
+        <div>
+          <h3 id="amortModalTitle">Loan Amortization Schedule</h3>
+          <span id="amortModalSubtitle" style="font-size: 0.82rem; color: var(--text-secondary);">Monthly principal and interest breakdown</span>
+        </div>
+        <button class="close-btn close-modal-btn" onclick="window.closeAmortizationModal()">✕</button>
+      </div>
+
       <div class="modal-body">
-        <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5;">
-          Connect your Google Sheet backend to automatically backup holdings, fetch live records, and log monthly updates to your cloud spreadsheet.
-        </p>
-
-        <div class="form-group" style="margin-top: 10px;">
-          <label for="sheetsUrlInput">Google Apps Script Web App URL *</label>
-          <input type="url" id="sheetsUrlInput" class="form-input" value="https://script.google.com/macros/s/AKfycbwvrC2yL39zzFr0xXgG3r2cHPzziwS-_rVfSZAQpsaj49sjyutn_uL-gzX_wizg--GeWw/exec" placeholder="https://script.google.com/macros/s/.../exec">
-          <span style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">
-            Deploy <code>google-apps-script/Code.gs</code> in Google Sheets with access set to "Anyone".
-          </span>
+        <div class="amort-summary-strip" id="amortSummaryStrip">
+          <!-- Dynamically populated summary boxes -->
         </div>
 
-        <div style="display: flex; gap: 10px; margin-top: 6px;">
-          <button class="quick-btn btn-primary" onclick="window.saveSheetsUrl()">
-            <span>💾 Save URL</span>
-          </button>
-          <button class="quick-btn btn-secondary" onclick="window.syncAllSheets()">
-            <span>⬆️ Upload All to Sheets</span>
-          </button>
-          <button class="quick-btn btn-secondary" onclick="window.fetchFromSheets()">
-            <span>⬇️ Pull from Sheets</span>
-          </button>
-        </div>
-
-        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px; font-size: 0.8rem; color: var(--text-secondary); margin-top: 10px;">
-          <strong>Quick Setup Steps:</strong>
-          <ol style="margin-left: 18px; margin-top: 6px; line-height: 1.6;">
-            <li>Create a new spreadsheet at <a href="https://sheets.new" target="_blank" style="color: var(--accent-cyan);">sheets.new</a>.</li>
-            <li>Go to <strong>Extensions > Apps Script</strong>, paste <code>google-apps-script/Code.gs</code>.</li>
-            <li>Click <strong>Deploy > New deployment > Web app</strong> (Access: <em>Anyone</em>).</li>
-            <li>Paste the generated URL above and click <strong>Save URL</strong>!</li>
-          </ol>
+        <div class="table-wrapper" style="max-height: 420px; overflow-y: auto; margin-top: 15px;">
+          <table class="data-table" id="amortTable">
+            <thead>
+              <tr>
+                <th>Month #</th>
+                <th>Payment Date</th>
+                <th>EMI Amount (₹)</th>
+                <th>Principal (₹)</th>
+                <th>Interest (₹)</th>
+                <th>Remaining Principal (₹)</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="amortTableBody">
+              <!-- Dynamically populated schedule -->
+            </tbody>
+          </table>
         </div>
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="quick-btn btn-secondary" onclick="window.closeSheetsModal()">Close</button>
+        <button type="button" class="quick-btn btn-secondary" onclick="window.closeAmortizationModal()">Close</button>
       </div>
     </div>
   </div>
 
   <!-- ======================================================================
-       MODAL 3: ADD / EDIT GOAL
+       MODAL 5: EMERGENCY FUND SETTINGS & ADJUSTMENT
+       ====================================================================== -->
+  <div class="modal-backdrop" id="emergencyFundModal">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3>🛡️ Update Emergency Fund</h3>
+        <button class="close-btn close-modal-btn" onclick="window.closeEmergencyFundModal()">✕</button>
+      </div>
+      <form id="emergencyFundForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="efInputCurrent">Current Emergency Reserve Amount (₹) *</label>
+            <input type="number" step="any" id="efInputCurrent" name="currentAmount" class="form-input" required>
+          </div>
+
+          <div class="form-group">
+            <label for="efInputTarget">Target Emergency Reserve Amount (₹) *</label>
+            <input type="number" step="any" id="efInputTarget" name="targetAmount" class="form-input" required>
+          </div>
+
+          <div style="background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: var(--radius-sm); padding: 12px; font-size: 0.82rem; color: var(--text-secondary);">
+            <strong>💡 Rule of Thumb:</strong> Aim for 3 to 6 months of living expenses in liquid, low-risk accounts (savings bank + liquid funds).
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="quick-btn btn-secondary" onclick="window.closeEmergencyFundModal()">Cancel</button>
+          <button type="submit" class="quick-btn btn-primary">Save Emergency Fund</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL 6: ADD / EDIT FINANCIAL GOAL
        ====================================================================== -->
   <div class="modal-backdrop" id="goalModal">
     <div class="modal-window">
       <div class="modal-header">
-        <h3 id="goalModalTitle">Create Investment Goal</h3>
+        <h3 id="goalModalTitle">Create Financial Goal</h3>
         <button class="close-btn close-modal-btn" onclick="window.closeGoalModal()">✕</button>
       </div>
       <form id="goalForm">
+        <input type="hidden" id="goalId" name="id">
         <div class="modal-body">
           <div class="form-group">
             <label for="goalTitle">Goal Title *</label>
-            <input type="text" id="goalTitle" name="title" class="form-input" placeholder="e.g. ₹5 Lakhs Portfolio Milestone" required>
+            <input type="text" id="goalTitle" name="title" class="form-input" placeholder="e.g. House Downpayment, Dream Vacation" required>
           </div>
 
           <div class="form-row">
@@ -560,38 +1460,34 @@
               <input type="number" step="any" id="goalTargetAmount" name="targetAmount" class="form-input" placeholder="e.g. 500000" required>
             </div>
             <div class="form-group">
-              <label for="goalCategory">Track Against</label>
-              <select id="goalCategory" name="category" class="form-select">
-                <option value="networth">Entire Net Worth</option>
-                <option value="etf">Mutual Funds & ETFs</option>
-                <option value="stock">Stocks Portfolio</option>
-                <option value="cash">Fixed Income & Liquid Cash</option>
-                <option value="commodity">Gold & Silver</option>
-              </select>
+              <label for="goalCurrentAmount">Current Saved Amount (₹)</label>
+              <input type="number" step="any" id="goalCurrentAmount" name="currentAmount" class="form-input" placeholder="e.g. 120000" value="0">
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-group">
-              <label for="goalTargetDate">Target Deadline Date</label>
-              <input type="date" id="goalTargetDate" name="targetDate" class="form-input">
+              <label for="goalTargetDate">Target Completion Date *</label>
+              <input type="date" id="goalTargetDate" name="targetDate" class="form-input" required>
             </div>
             <div class="form-group">
               <label for="goalIcon">Goal Icon Emoji</label>
               <select id="goalIcon" name="icon" class="form-select">
-                <option value="🎯">🎯 Target</option>
-                <option value="🛡️">🛡️ Shield (Emergency)</option>
-                <option value="📈">📈 Growth (Mutual Funds)</option>
-                <option value="🏡">🏡 House (Property)</option>
-                <option value="💰">💰 Money Bag</option>
-                <option value="⚡">⚡ Lightning</option>
+                <option value="🏡">🏡 House / Property</option>
+                <option value="🚗">🚗 Car / Vehicle</option>
+                <option value="✈️">✈️ Vacation / Travel</option>
+                <option value="🎓">🎓 Education</option>
+                <option value="💍">💍 Wedding</option>
+                <option value="🏖️">🏖️ Retirement</option>
+                <option value="💻">💻 Tech / Gadgets</option>
+                <option value="🎯">🎯 Milestone Target</option>
               </select>
             </div>
           </div>
 
           <div class="form-group">
-            <label for="goalNotes">Description / Strategy</label>
-            <textarea id="goalNotes" name="notes" class="form-textarea" placeholder="e.g. Monthly SIP target..."></textarea>
+            <label for="goalNotes">Description / Savings Strategy</label>
+            <textarea id="goalNotes" name="notes" class="form-textarea" placeholder="e.g. Monthly allocation towards index funds..."></textarea>
           </div>
         </div>
 
@@ -604,26 +1500,187 @@
   </div>
 
   <!-- ======================================================================
-       MODAL 4: DATA & BACKUP MANAGER
+       MODAL 7: ADD / EDIT DAILY EXPENSE
+       ====================================================================== -->
+  <div class="modal-backdrop" id="expenseModal">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 id="expenseModalTitle">Add Daily Expense</h3>
+        <button class="close-btn close-modal-btn" onclick="window.closeExpenseModal()">✕</button>
+      </div>
+      <form id="expenseForm">
+        <input type="hidden" id="expenseId" name="id">
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="expenseAmount">Expense Amount (₹) *</label>
+              <input type="number" step="any" id="expenseAmount" name="amount" class="form-input" placeholder="e.g. 850" required autofocus>
+            </div>
+            <div class="form-group">
+              <label for="expenseCategory">Category *</label>
+              <select id="expenseCategory" name="category" class="form-select" required>
+                <option value="food">🍔 Food & Dining</option>
+                <option value="groceries">🛒 Groceries & Supermarket</option>
+                <option value="housing">🏠 Housing & Rent</option>
+                <option value="utilities">💡 Utilities & Bills</option>
+                <option value="transport">🚗 Transportation & Fuel</option>
+                <option value="shopping">🛍️ Shopping & Apparel</option>
+                <option value="healthcare">🏥 Healthcare & Medical</option>
+                <option value="entertainment">🎬 Entertainment & Leisure</option>
+                <option value="education">📚 Education & Courses</option>
+                <option value="other">💼 Other Expense</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="expenseDate">Expense Date *</label>
+              <input type="date" id="expenseDate" name="date" class="form-input" required>
+            </div>
+            <div class="form-group">
+              <label for="expensePaymentMode">Payment Mode *</label>
+              <select id="expensePaymentMode" name="paymentMode" class="form-select">
+                <option value="UPI">UPI (GPay / PhonePe / Paytm)</option>
+                <option value="Credit Card">Credit Card</option>
+                <option value="Debit Card">Debit Card</option>
+                <option value="Net Banking">Net Banking</option>
+                <option value="Cash">Cash</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="expenseNotes">Description / Merchant Notes</label>
+            <input type="text" id="expenseNotes" name="notes" class="form-input" placeholder="e.g. Dinner with friends, Swiggy order, Petrol refill">
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="quick-btn btn-secondary" onclick="window.closeExpenseModal()">Cancel</button>
+          <button type="submit" class="quick-btn btn-primary">Save Expense</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL 8: QUICK ADD SELECTION MODAL
+       ====================================================================== -->
+  <div class="modal-backdrop" id="quickEntryModal">
+    <div class="modal-window" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3>⚡ Quick Add</h3>
+        <button class="close-btn close-modal-btn" onclick="window.closeQuickEntryModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="quick-actions-list">
+          <button class="quick-action-option" onclick="window.closeQuickEntryModal(); window.openExpenseModal();">
+            <span class="option-icon">💸</span>
+            <div class="option-text">
+              <strong>Add Daily Expense</strong>
+              <span>Log food, transport, bills, shopping</span>
+            </div>
+          </button>
+
+          <button class="quick-action-option" onclick="window.closeQuickEntryModal(); window.openSipModal();">
+            <span class="option-icon">🔄</span>
+            <div class="option-text">
+              <strong>Add Recurring SIP</strong>
+              <span>Set up mutual fund / stock monthly plan</span>
+            </div>
+          </button>
+
+          <button class="quick-action-option" onclick="window.closeQuickEntryModal(); window.openHoldingModal();">
+            <span class="option-icon">📈</span>
+            <div class="option-text">
+              <strong>Add Manual Investment</strong>
+              <span>Stocks, Gold, Mutual Funds, Real Estate</span>
+            </div>
+          </button>
+
+          <button class="quick-action-option" onclick="window.closeQuickEntryModal(); window.openAssetModal();">
+            <span class="option-icon">🏛️</span>
+            <div class="option-text">
+              <strong>Add Physical Asset</strong>
+              <span>Car, Bike, Gold, Real Estate, Electronics</span>
+            </div>
+          </button>
+
+          <button class="quick-action-option" onclick="window.closeQuickEntryModal(); window.openLoanModal();">
+            <span class="option-icon">💳</span>
+            <div class="option-text">
+              <strong>Add Loan</strong>
+              <span>Home loan, vehicle, personal EMI</span>
+            </div>
+          </button>
+
+          <button class="quick-action-option" onclick="window.closeQuickEntryModal(); window.openGoalModal();">
+            <span class="option-icon">🎯</span>
+            <div class="option-text">
+              <strong>Create Financial Goal</strong>
+              <span>Set a target date & savings milestone</span>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL 9: GOOGLE APPS SCRIPT / SHEETS SYNC
+       ====================================================================== -->
+  <div class="modal-backdrop" id="sheetsModal">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3>☁️ Google Sheets Cloud Sync</h3>
+        <button class="close-btn close-modal-btn" onclick="window.closeSheetsModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5;">
+          Connect your Google Sheet backend to backup all 4 modules (Investments, Loans, Savings, Expenses) to the cloud.
+        </p>
+
+        <div class="form-group" style="margin-top: 12px;">
+          <label for="sheetsUrlInput">Google Apps Script Web App URL *</label>
+          <input type="url" id="sheetsUrlInput" class="form-input" placeholder="https://script.google.com/macros/s/.../exec">
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 8px; flex-wrap: wrap;">
+          <button class="quick-btn btn-primary" onclick="window.saveSheetsUrl()">
+            <span>💾 Save URL</span>
+          </button>
+          <button class="quick-btn btn-secondary" onclick="window.syncAllSheets()">
+            <span>⬆️ Upload All to Cloud</span>
+          </button>
+          <button class="quick-btn btn-secondary" onclick="window.fetchFromSheets()">
+            <span>⬇️ Pull from Cloud</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="quick-btn btn-secondary" onclick="window.closeSheetsModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL 10: BACKUP & DATA MANAGER
        ====================================================================== -->
   <div class="modal-backdrop" id="dataModal">
     <div class="modal-window">
       <div class="modal-header">
-        <h3>Backup & Data Management</h3>
+        <h3>💾 Backup & Data Management</h3>
         <button class="close-btn close-modal-btn" onclick="window.closeDataModal()">✕</button>
       </div>
       <div class="modal-body">
-        <p style="font-size: 0.88rem; color: var(--text-secondary);">Your portfolio data is saved automatically in your browser's local storage. You can also export backups, download spreadsheets, or reset to original Aug-2026 data.</p>
+        <p style="font-size: 0.88rem; color: var(--text-secondary);">Your financial records are saved securely in your browser's local storage. Export full backups anytime.</p>
 
-        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 12px;">
           <button class="quick-btn btn-secondary" onclick="window.triggerJSONExport()">
             <span>📥</span>
             <span>Export Full Backup (JSON)</span>
-          </button>
-
-          <button class="quick-btn btn-secondary" onclick="window.triggerCSVExport()">
-            <span>📊</span>
-            <span>Export Holdings Spreadsheet (CSV)</span>
           </button>
 
           <label class="quick-btn btn-secondary" style="cursor: pointer;">
@@ -633,11 +1690,11 @@
           </label>
         </div>
 
-        <div style="border-top: 1px solid var(--border-subtle); padding-top: 16px; margin-top: 8px;">
+        <div style="border-top: 1px solid var(--border-subtle); padding-top: 16px; margin-top: 14px;">
           <h4 style="font-size: 0.95rem; margin-bottom: 8px;">Reset Options</h4>
-          <div style="display: flex; gap: 10px;">
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
             <button class="quick-btn btn-secondary" onclick="window.resetDemoPortfolio()">
-              <span>🔄 Reset to Aug-2026 Original Data</span>
+              <span>🔄 Load Sample Portfolio Data</span>
             </button>
             <button class="quick-btn btn-danger" onclick="window.clearAllPortfolioData()">
               <span>🗑️ Wipe All Data</span>

@@ -1,60 +1,50 @@
-# AuraInvest — Personal Portfolio & Investment Tracker
+# 🦈 Sharkfin — Personal Wealth, Loans, Savings & Expense OS
 
-A modern, responsive investment tracking web application built with **pure HTML5, CSS3, and JavaScript** (zero Node.js dependencies, zero build step). Features live Google Sheets sync via Google Apps Script.
-
----
-
-## 🌟 Key Features
-
-- **📊 Portfolio Overview**: Real-time Net Worth in INR (₹), Total Invested, All-Time Return ($/₹ and %), and 24h Day Change.
-- **📈 Interactive Performance Charts**: Interactive Chart.js Area Growth Chart with timeframes (`1W`, `1M`, `3M`, `1Y`, `ALL`) and Asset Allocation Doughnut Chart.
-- **💼 Holdings Ledger**: Multi-asset support (Stocks, Mutual Funds, ETFs, Gold/Silver, Post Office Schemes, NPS, Emergency Fund, Goals Savings).
-- **➕ Dedicated "Add Monthly Update" Tab**: Monthly entry form allowing quick updates across all asset categories with live running totals before saving.
-- **🎯 Goals & Milestones Tracker**: Track wealth targets and emergency funds with animated progress bars and celebration confetti.
-- **📅 Monthly Review**: Month-by-month net worth ledger with historical contributions vs. market appreciation chart.
-- **☁️ Google Sheets Cloud Backend**: Two-way sync with Google Sheets via Google Apps Script.
-- **🎨 Luxury Themes**: Dark Luxury, Midnight OLED, and Crisp Light modes.
-- **💱 Multi-Currency Converter**: Support for INR (₹), USD ($), EUR (€), GBP (£), CAD ($), AUD ($), and JPY (¥).
+A complete personal finance operating system built with **pure HTML5, CSS3, and JavaScript** (zero Node.js dependencies, zero build steps).
 
 ---
 
-## 📁 Project Structure
+## 🌟 Key Pillars
 
-```
-Invest App/
-├── index.html                  # Main single-page application
-├── css/
-│   └── styles.css              # Custom design system & animations
-├── js/
-│   └── app.js                  # State engine, charts, and Google Sheets sync
-├── google-apps-script/
-│   ├── Code.gs                 # Google Apps Script backend code
-│   └── README.md               # Google Sheets setup instructions
-├── .gitignore
-└── README.md
+1. **🏠 Home Overview**: High-level Net Worth summary, 4 Pillar metric cards, Wealth Composition & Monthly Cashflow charts.
+2. **📈 Investment**: Manual lump sum holdings (Stocks, ETFs, NPS) & recurring SIPs (SBI PSU, Post Office Scheme) with an interactive compound growth calculator.
+3. **🏛️ Assets**: Dedicated separate window for physical/tangible property (Car, Motorcycle, Physical Gold).
+4. **💳 Loans**: Reducing balance EMI engine, auto-updates on the 5th of each month, paid vs. remaining balance, and full Amortization Schedule modal.
+5. **🛡️ Savings**: Emergency Fund runway health meter & Financial Goals tracker with confetti celebrations.
+6. **💸 Expense**: Daily expense ledger with Month-over-Month comparison and category breakdown.
+
+---
+
+## 🚀 How to Deploy to GitHub Pages (Free Web Hosting)
+
+### Step 1: Open Terminal and navigate to the project directory
+```bash
+cd "/Users/anooj/Documents/Invest App"
 ```
 
+### Step 2: Stage and Commit your files
+```bash
+git add .
+git commit -m "Deploy Sharkfin Wealth OS"
+```
+
+### Step 3: Link to your GitHub repository and Push
+*(Replace `<YOUR-USERNAME>` and `<YOUR-REPO-NAME>` with your GitHub repository details)*
+```bash
+git branch -M main
+git remote add origin https://github.com/<YOUR-USERNAME>/<YOUR-REPO-NAME>.git
+git push -u origin main
+```
+*(If `origin` already exists, you can do: `git push -u origin main` or `git remote set-url origin https://github.com/<YOUR-USERNAME>/<YOUR-REPO-NAME>.git`)*
+
 ---
 
-## 🚀 Deploying to GitHub Pages
+### Step 4: Enable 1-Click Free Hosting on GitHub Pages
+1. Go to your repository on **GitHub** (e.g. `https://github.com/<YOUR-USERNAME>/<YOUR-REPO-NAME>`).
+2. Click **Settings** (top tab) ➔ **Pages** (in the left sidebar).
+3. Under **Build and deployment** ➔ **Source**, select **"Deploy from a branch"**.
+4. Under **Branch**, choose **`main`** and **`/ (root)`**, then click **Save**.
 
-1. **Push to GitHub**:
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit - AuraInvest Portfolio Tracker"
-   git branch -M main
-   git remote add origin https://github.com/<YOUR-GITHUB-USERNAME>/<REPO-NAME>.git
-   git push -u origin main
-   ```
+Within 1 minute, your app will be live on the web at:
+👉 **`https://<YOUR-USERNAME>.github.io/<YOUR-REPO-NAME>/`**
 
-2. **Enable GitHub Pages**:
-   - Go to your repository on GitHub.
-   - Navigate to **Settings** > **Pages** (left sidebar).
-   - Under **Build and deployment** > **Source**, select **Deploy from a branch**.
-   - Under **Branch**, select `main` and folder `/ (root)`.
-   - Click **Save**.
-
-3. **Live App URL**:
-   Your app will be live at:
-   `https://<YOUR-GITHUB-USERNAME>.github.io/<REPO-NAME>/`
