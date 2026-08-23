@@ -1679,7 +1679,7 @@
           plugins: {
             legend: {
               position: 'right',
-              labels: { color: textColor, font: { family: 'Plus Jakarta Sans', size: 12 } }
+              labels: { color: textColor, font: { family: 'Century Gothic', size: 12 } }
             },
             tooltip: {
               callbacks: {
@@ -1856,7 +1856,7 @@
           plugins: {
             legend: {
               position: 'right',
-              labels: { color: textColor, font: { family: 'Plus Jakarta Sans', size: 11 } }
+              labels: { color: textColor, font: { family: 'Century Gothic', size: 11 } }
             },
             tooltip: {
               callbacks: {

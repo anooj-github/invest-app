@@ -6,10 +6,10 @@
   <title>Sharkfin — Personal Wealth, Loans, Savings & Expense OS</title>
   <meta name="description" content="Sharkfin All-in-one personal finance tracker: Investments (Manual & SIP), Loans (EMI & Amortization), Savings (Emergency Fund & Goals), and Daily Expenses with Month-over-Month analytics.">
 
-  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <!-- Google Fonts: Century Gothic Fallbacks & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&family=Questrial&display=swap" rel="stylesheet">
 
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
@@ -145,6 +145,12 @@
                 <option value="light">Crisp Light</option>
               </select>
             </div>
+
+            <!-- Quick Add Button with + -->
+            <button class="header-quick-add-btn" onclick="window.openQuickEntryModal()" title="Quick Add (+)">
+              <span class="plus-symbol">+</span>
+              <span class="btn-text-desktop">Quick Add</span>
+            </button>
           </div>
         </div>
       </header>
@@ -1708,6 +1714,11 @@
       </div>
     </div>
   </div>
+
+  <!-- Mobile Floating Quick Add Action Button (+) -->
+  <button class="floating-quick-add-btn" onclick="window.openQuickEntryModal()" aria-label="Quick Add (+)" title="Quick Add (+)">
+    <span class="fab-plus-icon">+</span>
+  </button>
 
   <!-- Toast Notification Container -->
   <div id="toast-container"></div>
