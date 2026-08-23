@@ -1679,7 +1679,7 @@
           plugins: {
             legend: {
               position: 'right',
-              labels: { color: textColor, font: { family: 'Century Gothic', size: 12 } }
+              labels: { color: textColor, font: { family: 'Manrope', size: 12 } }
             },
             tooltip: {
               callbacks: {
@@ -1856,7 +1856,7 @@
           plugins: {
             legend: {
               position: 'right',
-              labels: { color: textColor, font: { family: 'Century Gothic', size: 11 } }
+              labels: { color: textColor, font: { family: 'Manrope', size: 11 } }
             },
             tooltip: {
               callbacks: {
@@ -1988,6 +1988,13 @@
     // Hide all view sections
     document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+    document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
+      if (btn.getAttribute('data-view') === viewId) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
 
     const targetSec = document.getElementById(`view-${viewId}`);
     const targetNav = document.getElementById(`nav-${viewId}`);
@@ -2061,9 +2068,26 @@
     }
   }
 
+  // Helper to open modal with 100% reliability
+  function showModalEl(modalId) {
+    const el = document.getElementById(modalId);
+    if (el) {
+      el.classList.add('open');
+      el.style.display = 'flex';
+    }
+  }
+
+  function hideModalEl(modalId) {
+    const el = document.getElementById(modalId);
+    if (el) {
+      el.classList.remove('open');
+      el.style.display = 'none';
+    }
+  }
+
   // --- MODAL: QUICK ENTRY ---
-  window.openQuickEntryModal = () => document.getElementById('quickEntryModal')?.classList.add('open');
-  window.closeQuickEntryModal = () => document.getElementById('quickEntryModal')?.classList.remove('open');
+  window.openQuickEntryModal = () => showModalEl('quickEntryModal');
+  window.closeQuickEntryModal = () => hideModalEl('quickEntryModal');
 
   // --- MODAL: MANUAL HOLDINGS ---
   window.openHoldingModal = function(id = null) {

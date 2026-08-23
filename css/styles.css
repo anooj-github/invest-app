@@ -51,8 +51,8 @@
   --info-bg: rgba(56, 189, 248, 0.12);
 
   /* Typography */
-  --font-main: 'Century Gothic', CenturyGothic, 'Apple Gothic', 'URW Gothic', Questrial, Montserrat, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Century Gothic', Consolas, monospace;
+  --font-main: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Manrope', Consolas, monospace;
 
   /* Shadows & Glassmorphism */
   --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
@@ -1878,12 +1878,14 @@ button, input, select, textarea {
   position: fixed;
   top: 0;
   left: 0;
+  right: 0;
+  bottom: 0;
   width: 100vw;
   height: 100vh;
   background: var(--bg-modal-overlay);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  z-index: 100;
+  z-index: 100000;
   display: none;
   align-items: center;
   justify-content: center;
@@ -2182,18 +2184,45 @@ button, input, select, textarea {
   }
 
   .floating-quick-add-btn {
-    bottom: 20px;
-    right: 18px;
-    width: 54px;
-    height: 54px;
+    display: none;
+  }
+
+  .main-wrapper {
+    padding-bottom: 90px !important;
   }
 }
 
 /* ==========================================================================
-   QUICK ADD BUTTONS (HEADER + FLOATING FAB)
+   HERO QUICK ADD & HEADER QUICK ADD BUTTONS
    ========================================================================== */
 
-/* 1. Header Quick Add Button */
+/* Hero Banner Quick Add Button */
+.hero-action-quick-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: linear-gradient(135deg, #6366f1 0%, #06b6d4 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+  transition: var(--transition);
+}
+
+.hero-action-quick-add-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.55);
+}
+
+.hero-action-quick-add-btn:active {
+  transform: scale(0.95);
+}
+
+/* Header Quick Add Button */
 .header-quick-add-btn {
   display: inline-flex;
   align-items: center;
@@ -2227,7 +2256,7 @@ button, input, select, textarea {
   display: inline-block;
 }
 
-/* 2. Floating Action Button (FAB) for Thumb / Mobile Access */
+/* Floating Action Button (FAB) for Desktop / Tablet */
 .floating-quick-add-btn {
   position: fixed;
   bottom: 26px;
@@ -2266,5 +2295,105 @@ button, input, select, textarea {
   user-select: none;
   pointer-events: none;
   font-family: Arial, sans-serif;
+}
+
+/* ==========================================================================
+   MOBILE BOTTOM NAVIGATION BAR (NATIVE APP FEEL)
+   ========================================================================== */
+.mobile-bottom-nav {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: calc(58px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    background: rgba(13, 20, 36, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    z-index: 99999;
+    align-items: center;
+    justify-content: space-around;
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  [data-theme="midnight"] .mobile-bottom-nav {
+    background: rgba(5, 5, 10, 0.96);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  [data-theme="light"] .mobile-bottom-nav {
+    background: rgba(255, 255, 255, 0.96);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .mobile-nav-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 6px 4px;
+    cursor: pointer;
+    flex: 1;
+    gap: 3px;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobile-nav-btn .mob-icon {
+    font-size: 1.15rem;
+    line-height: 1;
+    transition: transform 0.2s ease;
+  }
+
+  .mobile-nav-btn.active {
+    color: var(--accent-cyan);
+  }
+
+  .mobile-nav-btn.active .mob-icon {
+    transform: scale(1.15);
+  }
+
+  .mobile-nav-center-add {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1 0%, #06b6d4 100%);
+    color: #ffffff;
+    border: 3px solid var(--bg-primary);
+    box-shadow: 0 4px 18px rgba(99, 102, 241, 0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: -24px;
+    cursor: pointer;
+    flex-shrink: 0;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .mobile-nav-center-add:active {
+    transform: scale(0.9);
+  }
+
+  .mob-center-plus {
+    font-size: 32px;
+    font-weight: 300;
+    line-height: 1;
+    margin-top: -3px;
+    font-family: Arial, sans-serif;
+  }
 }
 

@@ -6,10 +6,10 @@
   <title>Sharkfin — Personal Wealth, Loans, Savings & Expense OS</title>
   <meta name="description" content="Sharkfin All-in-one personal finance tracker: Investments (Manual & SIP), Loans (EMI & Amortization), Savings (Emergency Fund & Goals), and Daily Expenses with Month-over-Month analytics.">
 
-  <!-- Google Fonts: Century Gothic Fallbacks & JetBrains Mono -->
+  <!-- Google Fonts: Manrope & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&family=Questrial&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
@@ -184,7 +184,12 @@
 
             <div class="hero-networth-actions">
               <div class="quick-jump-banner">
-                <span class="quick-jump-title">Quick Jump to Detailed View:</span>
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; flex-wrap: wrap;">
+                  <span class="quick-jump-title">Quick Jump to Detailed View:</span>
+                  <button class="hero-action-quick-add-btn" onclick="window.openQuickEntryModal()" title="Quick Add (+)">
+                    <span>⚡ Quick Add (+)</span>
+                  </button>
+                </div>
                 <div class="quick-jump-buttons">
                   <button class="pill-btn" onclick="window.switchView('investments')">📈 Investment</button>
                   <button class="pill-btn" onclick="window.switchView('loans')">💳 Loans</button>
@@ -1715,8 +1720,40 @@
     </div>
   </div>
 
-  <!-- Mobile Floating Quick Add Action Button (+) -->
-  <button class="floating-quick-add-btn" onclick="window.openQuickEntryModal()" aria-label="Quick Add (+)" title="Quick Add (+)">
+  <!-- ======================================================================
+       MOBILE BOTTOM NAVIGATION BAR (FIXED ON PHONES / MOBILE BROWSERS)
+       ====================================================================== -->
+  <nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="Mobile Navigation">
+    <button type="button" class="mobile-nav-btn active" data-view="overview" onclick="window.switchView('overview')" title="Home">
+      <span class="mob-icon">🏠</span>
+      <span class="mob-label">Home</span>
+    </button>
+    <button type="button" class="mobile-nav-btn" data-view="investments" onclick="window.switchView('investments')" title="Invest">
+      <span class="mob-icon">📈</span>
+      <span class="mob-label">Invest</span>
+    </button>
+    
+    <!-- Raised Center Glowing Quick Add Button -->
+    <button type="button" class="mobile-nav-center-add" onclick="window.openQuickEntryModal()" aria-label="Quick Add (+)" title="Quick Add (+)">
+      <span class="mob-center-plus">+</span>
+    </button>
+
+    <button type="button" class="mobile-nav-btn" data-view="assets" onclick="window.switchView('assets')" title="Assets">
+      <span class="mob-icon">🏛️</span>
+      <span class="mob-label">Assets</span>
+    </button>
+    <button type="button" class="mobile-nav-btn" data-view="loans" onclick="window.switchView('loans')" title="Loans">
+      <span class="mob-icon">💳</span>
+      <span class="mob-label">Loans</span>
+    </button>
+    <button type="button" class="mobile-nav-btn" data-view="expenses" onclick="window.switchView('expenses')" title="Expense">
+      <span class="mob-icon">💸</span>
+      <span class="mob-label">Expense</span>
+    </button>
+  </nav>
+
+  <!-- Mobile Floating Quick Add Action Button (+) for Tablet / Fallback -->
+  <button type="button" class="floating-quick-add-btn" onclick="window.openQuickEntryModal()" aria-label="Quick Add (+)" title="Quick Add (+)">
     <span class="fab-plus-icon">+</span>
   </button>
 
